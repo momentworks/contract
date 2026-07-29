@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MOMENT WORKS 축의대 대행 서비스 계약서</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700;900&family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0B0C0E;
+    --panel:#1B1D21;
+    --panel-line:#2C2E33;
+    --ivory:#EFEAE0;
+    --ivory-soft:#F7F4EE;
+    --ink-text:#211D19;
+    --muted:#8B857A;
+    --muted-dark:#9A968E;
+    --gold:#B8925A;
+    --gold-light:#D9BD8C;
+    --wine:#6E2430;
+    --wine-light:#8C3A46;
+    --off-white:#F5F2EC;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    background:var(--ivory);
+    color:var(--ink-text);
+    font-family:'Noto Sans KR', sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:60px;
+  }
+  h1,h2,h3,.serif{font-family:'Noto Serif KR', serif;}
+  .num{font-variant-numeric:tabular-nums;}
+
+  /* HEADER */
+  .top{
+    background:var(--ink);color:var(--off-white);
+    padding:36px 20px 30px;text-align:center;
+  }
+  .top .eyebrow{
+    font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold-light);
+    margin-bottom:10px;
+  }
+  .top h1{font-size:20px;font-weight:700;line-height:1.5;}
+  .top p{margin-top:8px;font-size:12.5px;color:var(--muted-dark);}
+
+  /* CONTAINER */
+  .wrap{max-width:560px;margin:0 auto;padding:0 18px;}
+
+  .card{
+    background:#fff;border:1px solid #E3DDCF;border-top:3px solid var(--gold);border-radius:10px;
+    padding:24px 20px;margin-top:16px;
+    box-shadow:0 2px 10px rgba(20,15,10,0.05);
+  }
+  .sec-num{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:28px;height:28px;border-radius:50%;
+    background:var(--wine);color:#fff;font-family:'Noto Serif KR',serif;font-weight:700;font-size:13px;
+    margin-right:9px;flex-shrink:0;
+  }
+  .sec-title{
+    display:flex;align-items:center;font-size:16.5px;font-weight:700;margin-bottom:16px;
+    color:var(--ink-text);
+  }
+
+  /* FORM FIELDS ===== 16px 고정: iOS Safari 자동 확대 방지, 터치 타깃 44px 이상 확보 ===== */
+  .field{margin-bottom:16px;}
+  .field label{
+    display:block;font-size:13px;color:var(--wine);font-weight:600;margin-bottom:7px;
+  }
+  .field input, .field select, .field textarea{
+    width:100%;min-height:48px;padding:12px 14px;font-size:16px;font-family:'Noto Sans KR',sans-serif;
+    border:1.5px solid #DCD5C6;border-radius:8px;background:var(--ivory-soft);color:var(--ink-text);
+    outline:none;transition:border-color .2s ease, box-shadow .2s ease;
+    -webkit-appearance:none;appearance:none;
+  }
+  .field select{
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='9'><path d='M1 1l6 6 6-6' stroke='%236E2430' stroke-width='1.8' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+    background-repeat:no-repeat;background-position:right 14px center;padding-right:36px;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus{
+    border-color:var(--gold);box-shadow:0 0 0 3px rgba(184,146,90,0.15);
+  }
+  .field input[readonly]{background:#EFEAE0;color:var(--muted);}
+  .field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .field .hint{font-size:11.5px;color:var(--muted);margin-top:6px;}
+
+  /* STATIC TEXT LIST */
+  .info-list{list-style:none;}
+  .info-list li{
+    font-size:13.5px;color:#3D3830;padding:7px 0 7px 18px;position:relative;line-height:1.7;
+  }
+  .info-list li::before{content:'·';position:absolute;left:0;color:var(--wine);font-weight:700;}
+  .legal p{font-size:13px;color:#4A443C;line-height:1.8;margin-bottom:9px;}
+  .legal p:last-child{margin-bottom:0;}
+  .legal .num-mark{color:var(--wine);font-weight:700;margin-right:4px;}
+
+  .sub-note{
+    font-size:12px;color:var(--muted);margin-top:8px;line-height:1.6;
+  }
+  .warn-note{
+    font-size:12px;color:var(--wine);margin-top:10px;line-height:1.6;font-weight:600;
+    background:#F6E8E9;padding:10px 12px;border-radius:6px;
+  }
+
+  /* PAYMENT BOX */
+  .pay-box{
+    background:var(--ivory-soft);border:1px dashed #D8CFBA;border-radius:6px;
+    padding:14px 16px;margin-top:10px;font-size:12.5px;color:#4A443C;line-height:1.85;
+  }
+  .pay-box strong{color:var(--wine);}
+
+  /* TABLE */
+  table.refund{width:100%;border-collapse:collapse;margin-top:10px;font-size:12.5px;}
+  table.refund th, table.refund td{border:1px solid #E3DDCF;padding:10px 8px;text-align:center;}
+  table.refund th{background:var(--ivory-soft);color:var(--wine);font-weight:700;font-size:11.5px;}
+  table.refund td{color:#3D3830;}
+
+  /* CHECKBOX AGREE ===== 터치 영역 확대 ===== */
+  .agree{
+    display:flex;align-items:flex-start;gap:12px;margin-top:16px;
+    background:var(--ivory-soft);border-radius:8px;padding:16px;
+    min-height:44px;cursor:pointer;
+  }
+  .agree input{
+    width:24px;height:24px;margin-top:0;accent-color:var(--wine);flex-shrink:0;cursor:pointer;
+  }
+  .agree label{font-size:13px;color:#3D3830;line-height:1.65;cursor:pointer;}
+
+  /* SEAL */
+  .seal-block{
+    display:flex;align-items:center;justify-content:space-between;gap:16px;
+    margin-top:16px;padding-top:16px;border-top:1px solid #EEE8DA;
+  }
+  .seal-info{font-size:12.5px;color:#3D3830;line-height:1.9;}
+  .seal-info b{color:var(--ink-text);}
+  .seal-img{
+    width:70px;height:70px;flex-shrink:0;object-fit:contain;
+  }
+
+  /* SUBMIT ===== 최소 48px 터치 타깃 ===== */
+  .submit-area{margin-top:26px;}
+  .btn-submit{
+    display:block;width:100%;min-height:52px;text-align:center;background:var(--wine);color:#fff;
+    font-weight:700;font-size:15.5px;padding:16px;border-radius:8px;border:none;cursor:pointer;
+    letter-spacing:0.02em;box-shadow:0 4px 14px rgba(110,36,48,0.25);
+    transition:transform .15s ease;
+  }
+  .btn-submit:active{transform:scale(0.98);}
+  .btn-copy{
+    display:block;width:100%;min-height:46px;text-align:center;background:transparent;color:var(--muted);
+    font-weight:500;font-size:13px;padding:12px;border:1.5px solid #DCD5C6;border-radius:8px;
+    margin-top:10px;cursor:pointer;
+  }
+  .submit-note{font-size:11.5px;color:var(--muted);text-align:center;margin-top:10px;line-height:1.6;}
+
+  .footer-mark{text-align:center;margin-top:30px;font-size:11px;color:var(--muted);}
+
+  /* ===== MOBILE REFINEMENTS ===== */
+  /* 대부분의 스마트폰(최대 480px)에서 2열 입력을 1열로 정리 - 카드형 배열 */
+  @media(max-width:480px){
+    .top{padding:28px 16px 22px;}
+    .top h1{font-size:18px;}
+    .top p{font-size:12px;}
+    .wrap{padding:0 12px;}
+    .card{padding:20px 16px;margin-top:14px;border-radius:8px;}
+    .sec-title{font-size:15.5px;margin-bottom:14px;}
+    .field-row{grid-template-columns:1fr;gap:0;}
+    .field-row .field{margin-bottom:16px;}
+    .field-row .field:last-child{margin-bottom:16px;}
+    table.refund{font-size:11px;}
+    table.refund th, table.refund td{padding:8px 5px;}
+    .seal-block{flex-direction:column;align-items:flex-start;gap:14px;}
+    .seal-img{align-self:center;}
+    .agree{padding:14px;}
+    .btn-submit, .btn-copy{font-size:15px;}
+  }
+  @media(max-width:340px){
+    .top h1{font-size:16.5px;}
+    .card{padding:18px 14px;}
+    .sec-title{font-size:14.5px;}
+  }
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+
+  <div class="top">
+    <div class="eyebrow">Moment Works · Electronic Contract</div>
+    <h1>MOMENT WORKS<br>축의대 대행 서비스 계약서</h1>
+    <p>아래 내용을 순서대로 작성해 주세요. 제출 시 문자로 접수됩니다.</p>
+  </div>
+
+  <div class="wrap">
+
+    <!-- 1. 계약 정보 -->
+    <form id="contractForm" onsubmit="return false;">
+    <div class="card">
+      <div class="sec-title"><span class="sec-num">1</span>계약 정보</div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="f-date">예식일</label>
+          <input type="date" id="f-date">
+        </div>
+        <div class="field">
+          <label for="f-time">예식시간</label>
+          <input type="time" id="f-time">
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="f-venue">예식장</label>
+          <input type="text" id="f-venue" placeholder="예: 서울 웨딩홀">
+        </div>
+        <div class="field">
+          <label for="f-hall">홀명</label>
+          <input type="text" id="f-hall" placeholder="예: 살롱홀">
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="f-client">계약자 (신랑측 또는 신부측 대표)</label>
+        <input type="text" id="f-client" placeholder="예: (신부) 홍길동">
+      </div>
+
+      <div class="field">
+        <label for="f-consult-date">상담일</label>
+        <input type="date" id="f-consult-date">
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="f-groom-guests">(신랑) 하객인원</label>
+          <input type="number" id="f-groom-guests" placeholder="명" min="0">
+        </div>
+        <div class="field">
+          <label for="f-bride-guests">(신부) 하객인원</label>
+          <input type="number" id="f-bride-guests" placeholder="명" min="0">
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="f-side">한측 / 양측 / 통합</label>
+        <select id="f-side" onchange="momentWorksApplySide()">
+          <option value="">선택</option>
+          <option value="한측">한측 (315,000원 · 기준인원 250명)</option>
+          <option value="양측">양측 (580,000원 · 기준인원 400명)</option>
+          <option value="통합">통합 (315,000원 · 기준인원 150명)</option>
+        </select>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="f-base-guests">기준인원</label>
+          <input type="text" id="f-base-guests" placeholder="선택 시 자동 입력" readonly>
+        </div>
+        <div class="field">
+          <label for="f-base-amount">기준금액 (원)</label>
+          <input type="text" id="f-base-amount" placeholder="선택 시 자동 입력" readonly>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. 서비스 범위 -->
+    <div class="card">
+      <div class="sec-title"><span class="sec-num">2</span>서비스 범위</div>
+      <ul class="info-list">
+        <li>축의금 접수 및 기록</li>
+        <li>하객 응대</li>
+        <li>식권 배부</li>
+        <li>축의금 정산 및 인계</li>
+        <li>축의금 인계</li>
+        <li>「Moment Works 축의대 대행 운영 설정서」에 따른 기타 업무<br><span class="hint">※ 예식 30일 이전에 별도 송부 예정</span></li>
+      </ul>
+    </div>
+
+    <!-- 3. 계약금 및 결제 -->
+    <div class="card">
+      <div class="sec-title"><span class="sec-num">3</span>계약금 및 결제</div>
+
+      <div class="field">
+        <label for="f-base-amount-confirm">기준금액 (원)</label>
+        <input type="text" id="f-base-amount-confirm" placeholder="1번 항목에서 한측/양측/통합 선택 시 자동 입력" readonly>
+      </div>
+
+      <div class="agree" style="margin-top:0;margin-bottom:14px;">
+        <input type="checkbox" id="f-earlybird" onchange="momentWorksCalcTotal()">
+        <label for="f-earlybird"><strong>얼리버드 할인 적용</strong> (상담 후 5일 이내 예약 확정 · 20,000원 할인)</label>
+      </div>
+
+      <div class="field">
+        <label for="f-partner-code">짝꿍코드 (선택)</label>
+        <input type="text" id="f-partner-code" placeholder="짝꿍코드가 있으시면 입력해 주세요" oninput="momentWorksCalcTotal()">
+        <p class="hint">짝꿍코드 입력 시 계약금액에서 10,000원이 추가 할인됩니다.</p>
+      </div>
+
+      <div class="field">
+        <label for="f-special-discount">특별 할인 금액 (원)</label>
+        <input type="text" id="f-special-discount" placeholder="0" readonly>
+      </div>
+
+      <div class="field">
+        <label for="f-total">계약금액 (원) <span style="color:var(--muted);font-weight:400;">※ 기준금액 - 특별 할인 금액</span></label>
+        <input type="text" id="f-total" placeholder="한측/양측/통합 선택 시 자동 입력" readonly>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="f-deposit">계 약 금 (원)</label>
+          <input type="number" id="f-deposit" value="100000" oninput="momentWorksCalcBalance()">
+        </div>
+        <div class="field">
+          <label for="f-deposit-date">입금일</label>
+          <input type="date" id="f-deposit-date">
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="f-balance">잔 금 (예식일 포함 2일 이내 정산, 원)</label>
+        <input type="text" id="f-balance" placeholder="원" readonly>
+      </div>
+
+      <div class="pay-box">
+        계약금 납부 계좌: <strong>카카오뱅크 3333-37-9293260</strong><br>
+        예금주: <strong>김현관(모먼트웍스)</strong>
+      </div>
+      <p class="warn-note">잔금은 할인 혜택 적용에 따라 변동(차감)될 수 있습니다.</p>
+    </div>
+
+    <!-- 4. 계약의 성립 -->
+    <div class="card">
+      <div class="sec-title"><span class="sec-num">4</span>계약의 성립</div>
+      <div class="legal">
+        <p><span class="num-mark">①</span>본 계약은 위탁자가 계약 내용을 확인한 후 계약금을 납부한 시점에 성립한 것으로 본다.</p>
+        <p><span class="num-mark">②</span>위탁자가 계약금을 납부한 경우, 본 계약의 모든 내용을 충분히 확인하고 이에 동의한 것으로 본다. 또한 계약금의 납부는 계약 내용 또는 날인에 갈음하는 의사표시로 보며, 별도의 서명 또는 날인이 없더라도 본 계약은 유효하게 성립하고 그 효력을 가진다.</p>
+      </div>
+    </div>
+
+    <!-- 5. 취소 및 환불 규정 -->
+    <div class="card">
+      <div class="sec-title"><span class="sec-num">5</span>취소 및 환불 규정</div>
+      <table class="refund" id="refundTable">
+        <thead>
+          <tr><th>취소 시점</th><th>환불</th></tr>
+        </thead>
+        <tbody>
+          <tr><td id="cut-60">예식일 60일 이전</td><td>계약금액의 100%</td></tr>
+          <tr><td id="cut-30">예식일 30일~59일 이전</td><td>계약금액의 50%</td></tr>
+          <tr><td id="cut-29">예식일 29일 이전부터</td><td>계약금액 환불 불가</td></tr>
+        </tbody>
+      </table>
+      <p class="hint">※ 예식일을 입력하시면 정확한 기준일이 자동으로 표시됩니다.</p>
+    </div>
+
+    <!-- 6. 수탁자의 귀책사유에 따른 계약 해지 및 손해배상 -->
+    <div class="card">
+      <div class="sec-title"><span class="sec-num">6</span>수탁자의 귀책사유에 따른 계약 해지 및 손해배상</div>
+      <div class="legal">
+        <p><span class="num-mark">①</span>수탁자의 귀책사유로 계약을 일방적으로 해지하거나 정당한 사유 없이 계약상 서비스를 제공하지 못한 경우, 수탁자는 위탁자에게 기납부된 계약금을 전액 환불하고, 추가로 계약금 상당액을 보상금으로 지급한다.</p>
+        <p>단, 천재지변, 전쟁, 정부의 명령 또는 조치, 감염병 확산에 따른 제한, 교통·통신의 마비 등 수탁자가 합리적으로 예측하거나 통제할 수 없는 불가항력적인 사유로 서비스를 제공하지 못한 경우에는 본 조를 적용하지 않는다.</p>
+      </div>
+    </div>
+
+    <!-- 7. 책임 및 면책 -->
+    <div class="card">
+      <div class="sec-title"><span class="sec-num">7</span>책임 및 면책</div>
+      <div class="legal">
+        <p><span class="num-mark">①</span>회사는 계약된 범위 내에서 선량한 관리자의 주의의무를 다하여 서비스를 제공합니다.</p>
+        <p><span class="num-mark">②</span>축의금은 기록 후 대리인(사전협의)에게 인계하며, 인계확인서 서명완료 시 관리 책임은 고객에게 이전됩니다.</p>
+        <p><span class="num-mark">③</span>천재지변 등 불가항력 사유는 상호 협의합니다.</p>
+      </div>
+    </div>
+
+    <!-- 8. 개인정보 -->
+    <div class="card">
+      <div class="sec-title"><span class="sec-num">8</span>개인정보</div>
+      <div class="legal">
+        <p><span class="num-mark">①</span>서비스 제공 목적 외에는 개인정보를 사용하지 않으며 관련 법령에 따라 관리합니다.</p>
+      </div>
+    </div>
+
+    <!-- 9. 기타사항 -->
+    <div class="card">
+      <div class="sec-title"><span class="sec-num">9</span>기타사항</div>
+      <div class="legal">
+        <p><span class="num-mark">①</span>세부 운영사항은 고객이 제출한 「Moment Works 축의대 대행 운영 설정서」에 따른다.</p>
+        <p><span class="num-mark">②</span>운영 설정서에 기재된 내용은 본 계약의 일부로 간주하며, 양 당사자는 해당 내용에 따라 서비스를 진행한다.</p>
+        <p><span class="num-mark">③</span>계약 리뷰 이벤트는 계약일로부터 3개월 이내 작성하여야 하며, 본식 진행 리뷰 이벤트는 예식일로부터 2개월 이내 작성하여야 한다. 해당 기간이 경과한 경우에는 리뷰 이벤트 참여 및 혜택 제공이 제한될 수 있다.</p>
+        <p><span class="num-mark">④</span>계약자 할인 짝꿍코드는 계약 체결 시 계약서에 기재된 코드만 유효하며, 계약 체결 이후 코드의 변경, 추가 적용 또는 소급 적용은 불가하다.</p>
+      </div>
+    </div>
+
+    <!-- 계약일자 & 서명 -->
+    <div class="card">
+      <div class="sec-title">계약일자 및 서명</div>
+
+      <div class="field">
+        <label for="f-contract-date">계약일자</label>
+        <input type="date" id="f-contract-date">
+      </div>
+
+      <p style="font-size:13px;font-weight:700;color:var(--wine);margin:16px 0 10px;">(위탁자)</p>
+
+      <div class="field">
+        <label for="f-signer-name">계약자 성함</label>
+        <input type="text" id="f-signer-name" placeholder="성함을 입력해 주세요" required>
+      </div>
+      <div class="field">
+        <label for="f-signer-phone">연락처</label>
+        <input type="tel" id="f-signer-phone" placeholder="010-0000-0000" required>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="f-groom-name">(신랑)</label>
+          <input type="text" id="f-groom-name" placeholder="성함">
+        </div>
+        <div class="field">
+          <label for="f-bride-name">(신부)</label>
+          <input type="text" id="f-bride-name" placeholder="성함">
+        </div>
+      </div>
+
+      <div class="agree">
+        <input type="checkbox" id="f-agree" required>
+        <label for="f-agree">서명: <strong>계약금 입금으로 서명을 갈음함</strong>에 동의합니다. (본 계약금 입금 시 위 계약 전체 내용에 동의한 것으로 간주됩니다.)</label>
+      </div>
+
+      <div class="seal-block">
+        <div class="seal-info">
+          (수탁자)<br>
+          사업자등록번호: <b>407-11-65078</b><br>
+          업체명: <b>모먼트웍스</b><br>
+          대표자: <b>김현관</b><br>
+          대표번호: <b>010-9952-9829</b>
+        </div>
+        <img src="data:image/png;base64,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" alt="모먼트웍스 직인" class="seal-img">
+      </div>
+    </div>
+
+    <div class="submit-area">
+      <button type="button" class="btn-submit" onclick="momentWorksSubmitContract()">계약서 제출하기</button>
+      <button type="button" class="btn-copy" onclick="momentWorksCopyContract()">계약 내용 복사하기</button>
+      <p class="submit-note">제출하기를 누르신 후 전송까지 다소 시간이 소요될 수 있습니다.<br>잠시만 기다려주세요. 감사합니다. :)</p>
+    </div>
+    </form>
+
+    <div class="footer-mark">MOMENT WORKS · 모먼트웍스</div>
+  </div>
+
+  <div id="printArea" style="position:absolute;left:-99999px;top:0;"></div>
+
+  <script>
+    // ====== Google Apps Script 백엔드 연결 설정 ======
+    // 아래 URL을 Apps Script 배포 후 발급되는 웹앱 URL로 교체하세요.
+    // (Code.gs의 SHARED_SECRET과 반드시 동일한 값으로 맞춰주세요.)
+    const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxJ-SXRWCwIjypuY5CNRNPBUSFfLIhCNQwqXzxv4NxUfFuP8kGzZY7nZa-7nOhJyhsi/exec';
+    const GAS_SHARED_SECRET = '1121';
+
+    function pad(n){ return n.toString().padStart(2,'0'); }
+    function fmtDate(d){ return d.getFullYear()+'.'+pad(d.getMonth()+1)+'.'+pad(d.getDate()); }
+
+    // default today's date for consult/contract date fields
+    (function(){
+      var today = new Date();
+      var iso = today.getFullYear()+'-'+pad(today.getMonth()+1)+'-'+pad(today.getDate());
+      document.getElementById('f-consult-date').value = iso;
+      document.getElementById('f-contract-date').value = iso;
+    })();
+
+    // auto-calc refund cutoff dates when wedding date changes
+    document.getElementById('f-date').addEventListener('change', function(){
+      var val = this.value;
+      if(!val){ return; }
+      var wedding = new Date(val + 'T00:00:00');
+
+      var d60 = new Date(wedding); d60.setDate(d60.getDate() - 60);
+      var d30 = new Date(wedding); d30.setDate(d30.getDate() - 30);
+      var d29 = new Date(wedding); d29.setDate(d29.getDate() - 29);
+
+      document.getElementById('cut-60').innerHTML = '예식일 60일 이전<br><span style="color:var(--muted);font-weight:400;">(' + fmtDate(d60) + '까지)</span>';
+      document.getElementById('cut-30').innerHTML = '예식일 30일~59일 이전<br><span style="color:var(--muted);font-weight:400;">(' + fmtDate(d30) + '까지)</span>';
+      document.getElementById('cut-29').innerHTML = '예식일 29일 이전부터<br><span style="color:var(--muted);font-weight:400;">(' + fmtDate(d29) + '부터)</span>';
+    });
+
+    var SIDE_INFO = {
+      '한측':  { amount: 315000, guests: '250명' },
+      '양측':  { amount: 580000, guests: '400명' },
+      '통합':  { amount: 315000, guests: '150명' }
+    };
+
+    function momentWorksApplySide(){
+      var side = document.getElementById('f-side').value;
+      var info = SIDE_INFO[side];
+      if(info){
+        document.getElementById('f-base-guests').value = info.guests;
+        document.getElementById('f-base-amount').value = info.amount;
+        document.getElementById('f-base-amount-confirm').value = info.amount;
+      } else {
+        document.getElementById('f-base-guests').value = '';
+        document.getElementById('f-base-amount').value = '';
+        document.getElementById('f-base-amount-confirm').value = '';
+      }
+      momentWorksCalcTotal();
+    }
+
+    function momentWorksCalcTotal(){
+      var base = parseInt(document.getElementById('f-base-amount').value) || 0;
+      var earlybird = document.getElementById('f-earlybird').checked;
+      var partnerCode = document.getElementById('f-partner-code').value.trim();
+
+      var earlybirdDiscount = earlybird ? 20000 : 0;
+      var partnerDiscount = partnerCode ? 10000 : 0;
+      var specialDiscount = earlybirdDiscount + partnerDiscount;
+
+      document.getElementById('f-special-discount').value = base > 0 ? specialDiscount : '';
+
+      var total = base > 0 ? (base - specialDiscount) : 0;
+      document.getElementById('f-total').value = total > 0 ? total : '';
+      momentWorksCalcBalance();
+    }
+
+    function momentWorksCalcBalance(){
+      var total = parseInt(document.getElementById('f-total').value) || 0;
+      var deposit = parseInt(document.getElementById('f-deposit').value) || 0;
+      var balance = total - deposit;
+      document.getElementById('f-balance').value = total > 0 ? (balance > 0 ? balance : 0) : '';
+    }
+
+    function buildContractSummary(){
+      var v = function(id){ return document.getElementById(id).value || '-'; };
+      var lines = [
+        '[MOMENT WORKS 축의대 대행 서비스 계약서]',
+        '',
+        '▷ 계약 정보',
+        '예식일: ' + v('f-date'),
+        '예식시간: ' + v('f-time'),
+        '예식장: ' + v('f-venue'),
+        '홀명: ' + v('f-hall'),
+        '계약자: ' + v('f-client'),
+        '상담일: ' + v('f-consult-date'),
+        '신랑 하객인원: ' + v('f-groom-guests') + '명',
+        '신부 하객인원: ' + v('f-bride-guests') + '명',
+        '한측/양측/통합: ' + v('f-side'),
+        '기준금액: ' + v('f-base-amount') + '원',
+        '',
+        '▷ 계약금 및 결제',
+        '계약금액: ' + v('f-total') + '원',
+        '계약금: ' + v('f-deposit') + '원 (입금일: ' + v('f-deposit-date') + ')',
+        '잔금: ' + v('f-balance') + '원',
+        '',
+        '▷ 계약일자 및 서명',
+        '계약일자: ' + v('f-contract-date'),
+        '계약자 성함: ' + v('f-signer-name'),
+        '연락처: ' + v('f-signer-phone'),
+        '(신랑) ' + v('f-groom-name') + '  (신부) ' + v('f-bride-name'),
+        '서명: 계약금 입금으로 갈음함 - ' + (document.getElementById('f-agree').checked ? '동의함' : '미동의')
+      ];
+      return lines.join('\n');
+    }
+
+    function pdfCell(text, isLabel, width){
+      return '<div style="width:' + width + 'px;box-sizing:border-box;padding:9px 10px;border-right:1px solid #ccc;border-bottom:1px solid #ccc;'
+        + 'background:' + (isLabel ? '#F7F4EE' : '#fff') + ';font-weight:' + (isLabel ? '700' : '400') + ';'
+        + 'word-break:break-word;line-height:1.5;">' + (text || '-') + '</div>';
+    }
+    function pdfRow4(l1,v1,l2,v2){
+      return '<div style="display:flex;border-left:1px solid #ccc;border-top:1px solid #ccc;">'
+        + pdfCell(l1,true,140) + pdfCell(v1,false,170) + pdfCell(l2,true,140) + pdfCell(v2,false,170)
+        + '</div>';
+    }
+    function pdfRowFull(l1,v1){
+      return '<div style="display:flex;border-left:1px solid #ccc;border-top:1px solid #ccc;">'
+        + pdfCell(l1,true,140) + pdfCell(v1,false,480)
+        + '</div>';
+    }
+    function pdfSectionTitle(text){
+      return '<div style="font-size:14px;font-weight:700;border-bottom:2px solid #6E2430;padding:0 0 6px 0;margin:26px 0 10px 0;">' + text + '</div>';
+    }
+    function pdfPara(html){
+      return '<p style="margin:0 0 16px 0;line-height:1.75;">' + html + '</p>';
+    }
+
+    function buildPrintableDocument(){
+      var v = function(id){ return document.getElementById(id).value || '-'; };
+      var agreeText = document.getElementById('f-agree').checked ? '계약금 입금으로 서명을 갈음함 (동의함)' : '(미동의)';
+      var sealEl = document.querySelector('.seal-img');
+      var sealSrc = sealEl ? sealEl.getAttribute('src') : '';
+
+      var html = ''
+        + '<div style="font-family:\'Noto Sans KR\',sans-serif;color:#1a1a1a;width:700px;padding:40px;background:#fff;font-size:13px;line-height:1.5;box-sizing:border-box;">'
+        + '<h1 style="text-align:center;font-size:20px;margin:0 0 24px 0;">MOMENT WORKS 축의대 대행 서비스 계약서</h1>'
+
+        + pdfSectionTitle('1. 계약 정보').replace('margin:26px', 'margin:0px')
+        + pdfRow4('예식일', v('f-date'), '예식시간', v('f-time'))
+        + pdfRow4('예식장', v('f-venue'), '홀명', v('f-hall'))
+        + pdfRowFull('계약자', v('f-client'))
+        + pdfRow4('상담일', v('f-consult-date'), '한측/양측/통합', v('f-side'))
+        + pdfRow4('신랑 하객인원', v('f-groom-guests') + '명', '신부 하객인원', v('f-bride-guests') + '명')
+        + pdfRow4('기준인원', v('f-base-guests'), '기준금액', v('f-base-amount') + '원')
+
+        + pdfSectionTitle('2. 서비스 범위')
+        + '<ul style="margin:0 0 4px 0;padding-left:20px;">'
+        + '<li style="padding:3px 0;">축의금 접수 및 기록</li>'
+        + '<li style="padding:3px 0;">하객 응대</li>'
+        + '<li style="padding:3px 0;">식권 배부</li>'
+        + '<li style="padding:3px 0;">축의금 정산 및 인계</li>'
+        + '<li style="padding:3px 0;">축의금 인계</li>'
+        + '<li style="padding:3px 0;">「Moment Works 축의대 대행 운영 설정서」에 따른 기타 업무 (예식 30일 이전 별도 송부)</li>'
+        + '</ul>'
+
+        + pdfSectionTitle('3. 계약금 및 결제')
+        + pdfRowFull('기준금액', v('f-base-amount-confirm') + '원')
+        + pdfRowFull('얼리버드 할인 적용', document.getElementById('f-earlybird').checked ? '적용 (20,000원 할인)' : '미적용')
+        + pdfRowFull('짝꿍코드', v('f-partner-code') !== '-' ? (v('f-partner-code') + ' (10,000원 할인 적용)') : '미입력')
+        + pdfRowFull('특별 할인 금액', v('f-special-discount') + '원')
+        + pdfRowFull('계약금액', v('f-total') + '원')
+        + pdfRowFull('계약금 / 입금일', v('f-deposit') + '원 / ' + v('f-deposit-date'))
+        + pdfRowFull('잔금 (예식일 포함 2일 이내 정산)', v('f-balance') + '원')
+        + '<p style="font-size:11.5px;color:#555;margin:10px 0 0 0;line-height:1.7;">계약금 납부 계좌: 카카오뱅크 3333-37-9293260 / 예금주: 김현관(모먼트웍스)<br>잔금은 할인 혜택 적용에 따라 변동(차감)될 수 있습니다.</p>'
+
+        + pdfSectionTitle('4. 계약의 성립')
+        + pdfPara('① 본 계약은 위탁자가 계약 내용을 확인한 후 계약금을 납부한 시점에 성립한 것으로 본다.<br>'
+          + '② 위탁자가 계약금을 납부한 경우, 본 계약의 모든 내용을 충분히 확인하고 이에 동의한 것으로 본다. 또한 계약금의 납부는 계약 내용 또는 날인에 갈음하는 의사표시로 보며, 별도의 서명 또는 날인이 없더라도 본 계약은 유효하게 성립하고 그 효력을 가진다.')
+
+        + pdfSectionTitle('5. 취소 및 환불 규정')
+        + pdfRowFull('취소 시점', '환불')
+        + pdfRowFull(document.getElementById('cut-60').innerText, '계약금액의 100%')
+        + pdfRowFull(document.getElementById('cut-30').innerText, '계약금액의 50%')
+        + pdfRowFull(document.getElementById('cut-29').innerText, '계약금액 환불 불가')
+
+        + pdfSectionTitle('6. 수탁자의 귀책사유에 따른 계약 해지 및 손해배상')
+        + pdfPara('① 수탁자의 귀책사유로 계약을 일방적으로 해지하거나 정당한 사유 없이 계약상 서비스를 제공하지 못한 경우, 수탁자는 위탁자에게 기납부된 계약금을 전액 환불하고, 추가로 계약금 상당액을 보상금으로 지급한다.<br>'
+          + '단, 천재지변, 전쟁, 정부의 명령 또는 조치, 감염병 확산에 따른 제한, 교통·통신의 마비 등 수탁자가 합리적으로 예측하거나 통제할 수 없는 불가항력적인 사유로 서비스를 제공하지 못한 경우에는 본 조를 적용하지 않는다.')
+
+        + pdfSectionTitle('7. 책임 및 면책')
+        + pdfPara('① 회사는 계약된 범위 내에서 선량한 관리자의 주의의무를 다하여 서비스를 제공합니다.<br>'
+          + '② 축의금은 기록 후 대리인(사전협의)에게 인계하며, 인계확인서 서명완료 시 관리 책임은 고객에게 이전됩니다.<br>'
+          + '③ 천재지변 등 불가항력 사유는 상호 협의합니다.')
+
+        + pdfSectionTitle('8. 개인정보')
+        + pdfPara('① 서비스 제공 목적 외에는 개인정보를 사용하지 않으며 관련 법령에 따라 관리합니다.')
+
+        + pdfSectionTitle('9. 기타사항')
+        + pdfPara('① 세부 운영사항은 고객이 제출한 「Moment Works 축의대 대행 운영 설정서」에 따른다.<br>'
+          + '② 운영 설정서에 기재된 내용은 본 계약의 일부로 간주하며, 양 당사자는 해당 내용에 따라 서비스를 진행한다.<br>'
+          + '③ 계약 리뷰 이벤트는 계약일로부터 3개월 이내 작성하여야 하며, 본식 진행 리뷰 이벤트는 예식일로부터 2개월 이내 작성하여야 한다. 해당 기간이 경과한 경우에는 리뷰 이벤트 참여 및 혜택 제공이 제한될 수 있다.<br>'
+          + '④ 계약자 할인 짝꿍코드는 계약 체결 시 계약서에 기재된 코드만 유효하며, 계약 체결 이후 코드의 변경, 추가 적용 또는 소급 적용은 불가하다.')
+
+        + '<p style="text-align:center;margin:20px 0 24px 0;">계약일자: ' + v('f-contract-date') + '</p>'
+
+        + '<div style="display:flex;gap:20px;">'
+        + '<div style="width:340px;">'
+        + '<p style="font-weight:700;color:#6E2430;margin:0 0 10px 0;">(위탁자)</p>'
+        + '<p style="margin:0 0 6px 0;">계약자: ' + v('f-signer-name') + '</p>'
+        + '<p style="margin:0 0 6px 0;">연락처: ' + v('f-signer-phone') + '</p>'
+        + '<p style="margin:0 0 6px 0;">서명: ' + agreeText + '</p>'
+        + '<p style="margin:10px 0 0 0;">(신랑) ' + v('f-groom-name') + '&nbsp;&nbsp;&nbsp;(신부) ' + v('f-bride-name') + '</p>'
+        + '</div>'
+        + '<div style="width:280px;display:flex;justify-content:space-between;align-items:flex-start;">'
+        + '<div>'
+        + '<p style="font-weight:700;margin:0 0 10px 0;">(수탁자)</p>'
+        + '<p style="margin:0 0 6px 0;">사업자등록번호: 407-11-65078</p>'
+        + '<p style="margin:0 0 6px 0;">업체명: 모먼트웍스</p>'
+        + '<p style="margin:0 0 6px 0;">대표자: 김현관</p>'
+        + '<p style="margin:0 0 6px 0;">대표번호: 010-9952-9829</p>'
+        + '</div>'
+        + (sealSrc ? '<img src="' + sealSrc + '" style="width:64px;height:64px;object-fit:contain;margin-left:10px;">' : '')
+        + '</div>'
+        + '</div>'
+
+        + '</div>';
+
+      var container = document.getElementById('printArea');
+      container.innerHTML = html;
+      return container;
+    }
+
+    function collectFormData(){
+      var v = function(id){ return document.getElementById(id).value || ''; };
+      return {
+        secret: GAS_SHARED_SECRET,
+        weddingDate: v('f-date'),
+        weddingTime: v('f-time'),
+        venue: v('f-venue'),
+        hall: v('f-hall'),
+        side: v('f-side'),
+        total: v('f-total'),
+        deposit: v('f-deposit'),
+        balance: v('f-balance'),
+        earlybird: document.getElementById('f-earlybird').checked,
+        partnerCode: v('f-partner-code'),
+        signerName: v('f-signer-name'),
+        signerPhone: v('f-signer-phone')
+      };
+    }
+
+    // "[모먼트웍스] 축의대 대행 서비스 계약서(예식일_예식시작시간)_계약자명" 형태의 공통 이름 생성
+    function buildContractName(){
+      var date = (document.getElementById('f-date').value || '').replace(/-/g,'');
+      var time = (document.getElementById('f-time').value || '').replace(/:/g,'');
+      var name = document.getElementById('f-signer-name').value.trim();
+      return '[모먼트웍스] 축의대 대행 서비스 계약서(' + date + '_' + time + ')_' + name;
+    }
+
+    // HTML 페이지 내용을 그대로 캡처해서 jsPDF로 PDF를 만들고, base64 문자열로 반환
+    async function generateContractPdfBase64(){
+      var printEl = buildPrintableDocument();
+      var canvas = await html2canvas(printEl, { scale: 2, backgroundColor: '#ffffff' });
+
+      var jsPDF = window.jspdf.jsPDF;
+      var pdf = new jsPDF('p', 'mm', 'a4');
+      var margin = 12; // 상하좌우 여백(mm)
+      var pageWidth = pdf.internal.pageSize.getWidth();
+      var pageHeight = pdf.internal.pageSize.getHeight();
+      var contentWidth = pageWidth - margin * 2;
+      var contentHeight = pageHeight - margin * 2;
+
+      var imgWidth = contentWidth;
+      var imgHeight = canvas.height * imgWidth / canvas.width;
+      var imgData = canvas.toDataURL('image/png');
+
+      var heightLeft = imgHeight;
+      var renderedHeight = 0;
+
+      pdf.addImage(imgData, 'PNG', margin, margin, imgWidth, imgHeight);
+      heightLeft -= contentHeight;
+      renderedHeight += contentHeight;
+
+      while(heightLeft > 0){
+        pdf.addPage();
+        pdf.addImage(imgData, 'PNG', margin, margin - renderedHeight, imgWidth, imgHeight);
+        heightLeft -= contentHeight;
+        renderedHeight += contentHeight;
+      }
+
+      // data:application/pdf;base64,XXXX 에서 base64 부분만 추출
+      var dataUri = pdf.output('datauristring');
+      var base64 = dataUri.split(',')[1];
+      return base64;
+    }
+
+    async function momentWorksSubmitContract(){
+      var name = document.getElementById('f-signer-name').value.trim();
+      var phone = document.getElementById('f-signer-phone').value.trim();
+      var agree = document.getElementById('f-agree').checked;
+
+      if(!document.getElementById('f-date').value){
+        alert('예식일을 입력해 주세요.');
+        return;
+      }
+      if(!name || !phone){
+        alert('계약자 성함과 연락처는 필수 입력 항목입니다.');
+        return;
+      }
+      if(!agree){
+        alert('서명(계약금 입금으로 갈음함) 동의에 체크해 주세요.');
+        return;
+      }
+
+      var btn = document.querySelector('.btn-submit');
+      var originalLabel = btn.textContent;
+      btn.textContent = 'PDF 생성 중...';
+      btn.disabled = true;
+
+      var fileName = buildContractName() + '.pdf';
+
+      try{
+        var pdfBase64 = await generateContractPdfBase64();
+
+        // 백엔드 URL이 아직 설정되지 않았다면, 예전 방식(PDF 다운로드 + 이메일 초안)으로 대체 동작
+        if(!GAS_WEB_APP_URL || GAS_WEB_APP_URL.indexOf('PASTE_YOUR') === 0){
+          momentWorksFallbackDownload(pdfBase64, fileName, name, phone);
+          return;
+        }
+
+        btn.textContent = '전송 중...';
+
+        var payload = collectFormData();
+        payload.fileName = fileName;
+        payload.pdfBase64 = pdfBase64;
+
+        var res = await fetch(GAS_WEB_APP_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // preflight(OPTIONS) 방지용
+          body: JSON.stringify(payload)
+        });
+
+        if(!res.ok){
+          throw new Error('서버 응답 오류 (HTTP ' + res.status + ')');
+        }
+
+        var rawText = await res.text();
+        var result;
+        try{
+          result = JSON.parse(rawText);
+        } catch(parseErr){
+          console.error('JSON 파싱 실패, 응답 원문:', rawText);
+          throw new Error('서버가 예상과 다른 응답을 보냈습니다. (배포 설정을 확인해 주세요)');
+        }
+
+        if(result.ok){
+          alert('계약서가 정상적으로 접수되었습니다.\nPDF가 담당자 이메일로 자동 발송되었습니다.');
+        } else {
+          console.error('GAS 오류:', result.error);
+          alert('접수 중 문제가 발생했습니다.\n\n[서버 오류 내용]\n' + result.error);
+        }
+      } catch(err){
+        console.error(err);
+        alert('전송 중 문제가 발생했습니다.\n\n[오류 내용]\n' + err.message);
+      } finally {
+        btn.textContent = originalLabel;
+        btn.disabled = false;
+      }
+    }
+
+    // ====== 백업용: 백엔드 미설정 시에만 동작 (PDF 다운로드 + 이메일 초안 수동 첨부) ======
+    function momentWorksFallbackDownload(pdfBase64, fileName, name, phone){
+      var link = document.createElement('a');
+      link.href = 'data:application/pdf;base64,' + pdfBase64;
+      link.download = fileName;
+      link.click();
+
+      var subject = '[모먼트웍스] 축의대 대행 계약서 - ' + name;
+      var mailBody = '방금 다운로드된 계약서 PDF 파일(' + fileName + ')을 이 메일에 첨부하여 전송해 주세요.\n\n계약자: ' + name + '\n연락처: ' + phone;
+      var mailUrl = 'mailto:moment_works@naver.com,bn_company@naver.com?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(mailBody);
+
+      setTimeout(function(){
+        window.location.href = mailUrl;
+      }, 600);
+    }
+
+    function momentWorksCopyContract(){
+      var text = buildContractSummary();
+      if(navigator.clipboard){
+        navigator.clipboard.writeText(text).then(function(){
+          alert('계약 내용이 복사되었습니다. 문자나 카카오톡에 붙여넣기 하실 수 있습니다.');
+        }).catch(function(){
+          alert('복사에 실패했습니다. 화면을 길게 눌러 직접 복사해 주세요.');
+        });
+      } else {
+        alert('이 브라우저에서는 자동 복사가 지원되지 않습니다.');
+      }
+    }
+  </script>
+
+</body>
+</html>
