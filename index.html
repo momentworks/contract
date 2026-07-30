@@ -586,6 +586,12 @@
     function pdfPara(html){
       return '<p style="margin:0 0 16px 0;line-height:1.75;">' + html + '</p>';
     }
+    // 금액 문자열을 천 단위 콤마 표기로 변환 (숫자가 아니면 원본 그대로 반환)
+    function fmtMoney(val){
+      var n = parseInt((val || '').toString().replace(/[^0-9-]/g, ''), 10);
+      if(isNaN(n)){ return val || '-'; }
+      return n.toLocaleString('ko-KR');
+    }
     // 조항 내 문장(①②③...)을 각각 별도 문단으로 분리하여 문장 간 간격을 확보 (가독성 개선용)
     function pdfParaList(sentences){
       return '<div style="margin:0 0 16px 0;">'
@@ -615,7 +621,7 @@
         + pdfRowFull('계약자', v('f-client'))
         + pdfRow4('상담일', v('f-consult-date'), '한측/양측/통합', v('f-side'))
         + pdfRow4('신랑 하객인원', v('f-groom-guests') + '명', '신부 하객인원', v('f-bride-guests') + '명')
-        + pdfRow4('기준인원', v('f-base-guests'), '기준금액', v('f-base-amount') + '원')
+        + pdfRow4('기준인원', v('f-base-guests'), '기준금액', fmtMoney(v('f-base-amount')) + '원')
 
         + pdfSectionTitle('2. 서비스 범위')
         + '<ul style="margin:0 0 4px 0;padding-left:20px;">'
@@ -628,13 +634,13 @@
         + '</ul>'
 
         + pdfSectionTitle('3. 계약금 및 결제')
-        + pdfRowFull('기준금액', v('f-base-amount-confirm') + '원')
+        + pdfRowFull('기준금액', fmtMoney(v('f-base-amount-confirm')) + '원')
         + pdfRowFull('얼리버드 할인 적용', document.getElementById('f-earlybird').checked ? '적용 (20,000원 할인)' : '미적용')
         + pdfRowFull('짝꿍코드', v('f-partner-code') !== '-' ? (v('f-partner-code') + ' (10,000원 할인 적용)') : '미입력')
-        + pdfRowFull('특별 할인 금액', v('f-special-discount') + '원')
-        + pdfRowFull('계약금액', v('f-total') + '원')
-        + pdfRowFull('계약금 / 입금일', v('f-deposit') + '원 / ' + v('f-deposit-date'))
-        + pdfRowFull('잔금 (예식일 포함 2일 이내 정산)', v('f-balance') + '원')
+        + pdfRowFull('특별 할인 금액', fmtMoney(v('f-special-discount')) + '원')
+        + pdfRowFull('계약금액', fmtMoney(v('f-total')) + '원')
+        + pdfRowFull('계약금 / 입금일', fmtMoney(v('f-deposit')) + '원 / ' + v('f-deposit-date'))
+        + pdfRowFull('잔금 (예식일 포함 2일 이내 정산)', fmtMoney(v('f-balance')) + '원')
         + '<p style="font-size:11.5px;color:#555;margin:10px 0 4px 0;line-height:1.7;">계약금 납부 계좌: 카카오뱅크 3333-37-9293260 / 예금주: 김현관(모먼트웍스)</p>'
         + '<p style="font-size:11.5px;color:#555;margin:0;line-height:1.7;">잔금은 할인 혜택 적용에 따라 변동(차감)될 수 있습니다.</p>'
 
@@ -650,9 +656,9 @@
 
         + pdfSectionTitle('5. 취소 및 환불 규정')
         + pdfRowFull('취소 시점', '환불')
-        + pdfRowFull(document.getElementById('cut-60').innerText, '계약금액의 100%')
-        + pdfRowFull(document.getElementById('cut-30').innerText, '계약금액의 50%')
-        + pdfRowFull(document.getElementById('cut-29').innerText, '계약금액 환불 불가')
+        + pdfRowFull(document.getElementById('cut-60').innerHTML, '계약금액의 100%')
+        + pdfRowFull(document.getElementById('cut-30').innerHTML.replace('59일 이전', '59일<br>이전'), '계약금액의 50%')
+        + pdfRowFull(document.getElementById('cut-29').innerHTML, '계약금액 환불 불가')
 
         + pdfSectionTitle('6. 수탁자의 귀책사유에 따른 계약 해지 및 손해배상')
         + pdfParaList([
