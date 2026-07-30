@@ -748,8 +748,9 @@
       var contentHeight = pageHeight - margin * 2;
 
       for(var i = 0; i < pageEls.length; i++){
-        var canvas = await html2canvas(pageEls[i], { scale: 2, backgroundColor: '#ffffff' });
-        var imgData = canvas.toDataURL('image/png');
+        var canvas = await html2canvas(pageEls[i], { scale: 1.5, backgroundColor: '#ffffff' });
+        // PNG(무손실) 대신 JPEG(압축)로 저장하여 PDF 용량을 대폭 줄임 (텍스트 위주 문서라 화질 저하는 거의 체감되지 않음)
+        var imgData = canvas.toDataURL('image/jpeg', 0.85);
 
         var imgWidth = contentWidth;
         var imgHeight = canvas.height * imgWidth / canvas.width;
@@ -764,7 +765,7 @@
         if(i > 0){ pdf.addPage(); }
 
         var xOffset = margin + (contentWidth - imgWidth) / 2;
-        pdf.addImage(imgData, 'PNG', xOffset, margin, imgWidth, imgHeight);
+        pdf.addImage(imgData, 'JPEG', xOffset, margin, imgWidth, imgHeight);
       }
 
       // data:application/pdf;base64,XXXX 에서 base64 부분만 추출
