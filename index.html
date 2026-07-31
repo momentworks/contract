@@ -229,6 +229,22 @@
       </div>
 
       <div class="field">
+        <label for="f-client-phone">연락처</label>
+        <input type="tel" id="f-client-phone" placeholder="010-0000-0000">
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="f-groom-name-info">(신랑) 성함</label>
+          <input type="text" id="f-groom-name-info" placeholder="성함">
+        </div>
+        <div class="field">
+          <label for="f-bride-name-info">(신부) 성함</label>
+          <input type="text" id="f-bride-name-info" placeholder="성함">
+        </div>
+      </div>
+
+      <div class="field">
         <label for="f-consult-date">상담일</label>
         <input type="date" id="f-consult-date">
       </div>
@@ -405,24 +421,25 @@
       </div>
 
       <p style="font-size:13px;font-weight:700;color:var(--wine);margin:16px 0 10px;">(위탁자)</p>
+      <p class="hint" style="margin:-6px 0 10px;">※ 계약자 성함/연락처/신랑/신부는 상단 "계약 정보"에 입력한 값이 자동으로 반영됩니다.</p>
 
       <div class="field">
         <label for="f-signer-name">계약자 성함</label>
-        <input type="text" id="f-signer-name" placeholder="성함을 입력해 주세요" required>
+        <input type="text" id="f-signer-name" placeholder="성함을 입력해 주세요" required readonly>
       </div>
       <div class="field">
         <label for="f-signer-phone">연락처</label>
-        <input type="tel" id="f-signer-phone" placeholder="010-0000-0000" required>
+        <input type="tel" id="f-signer-phone" placeholder="010-0000-0000" required readonly>
       </div>
 
       <div class="field-row">
         <div class="field">
           <label for="f-groom-name">(신랑)</label>
-          <input type="text" id="f-groom-name" placeholder="성함">
+          <input type="text" id="f-groom-name" placeholder="성함" readonly>
         </div>
         <div class="field">
           <label for="f-bride-name">(신부)</label>
-          <input type="text" id="f-bride-name" placeholder="성함">
+          <input type="text" id="f-bride-name" placeholder="성함" readonly>
         </div>
       </div>
 
@@ -464,6 +481,14 @@
 
     function pad(n){ return n.toString().padStart(2,'0'); }
     function fmtDate(d){ return d.getFullYear()+'.'+pad(d.getMonth()+1)+'.'+pad(d.getDate()); }
+    // 'YYYY-MM-DD' 형식의 날짜 문자열에 요일을 붙여서 반환 (예: 2026-05-16 -> 2026-05-16 (토))
+    function fmtDateWithDay(iso){
+      if(!iso || iso === '-'){ return iso || '-'; }
+      var d = new Date(iso + 'T00:00:00');
+      if(isNaN(d.getTime())){ return iso; }
+      var days = ['일','월','화','수','목','금','토'];
+      return iso + ' (' + days[d.getDay()] + ')';
+    }
 
     // default today's date for consult/contract date fields
     (function(){
@@ -472,6 +497,23 @@
       document.getElementById('f-consult-date').value = iso;
       document.getElementById('f-contract-date').value = iso;
       document.getElementById('f-deposit-date').value = iso;
+    })();
+
+    // "계약 정보"에 입력한 값을 "계약일자 및 서명" 영역에 실시간으로 자동 반영
+    (function(){
+      var syncPairs = [
+        ['f-client', 'f-signer-name'],
+        ['f-client-phone', 'f-signer-phone'],
+        ['f-groom-name-info', 'f-groom-name'],
+        ['f-bride-name-info', 'f-bride-name']
+      ];
+      syncPairs.forEach(function(pair){
+        var source = document.getElementById(pair[0]);
+        var target = document.getElementById(pair[1]);
+        source.addEventListener('input', function(){
+          target.value = source.value;
+        });
+      });
     })();
 
     // auto-calc refund cutoff dates when wedding date changes
@@ -539,7 +581,7 @@
         '[MOMENT WORKS 축의대 대행 서비스 계약서]',
         '',
         '▷ 계약 정보',
-        '예식일: ' + v('f-date'),
+        '예식일: ' + fmtDateWithDay(v('f-date')),
         '예식시간: ' + v('f-time'),
         '예식장: ' + v('f-venue'),
         '홀명: ' + v('f-hall'),
@@ -616,7 +658,7 @@
         + '<h1 style="text-align:center;font-size:20px;margin:0 0 24px 0;">MOMENT WORKS 축의대 대행 서비스 계약서</h1>'
 
         + pdfSectionTitle('1. 계약 정보').replace('margin:26px', 'margin:0px')
-        + pdfRow4('예식일', v('f-date'), '예식시간', v('f-time'))
+        + pdfRow4('예식일', fmtDateWithDay(v('f-date')), '예식시간', v('f-time'))
         + pdfRow4('예식장', v('f-venue'), '홀명', v('f-hall'))
         + pdfRowFull('계약자', v('f-client'))
         + pdfRow4('상담일', v('f-consult-date'), '한측/양측/통합', v('f-side'))
@@ -750,12 +792,13 @@
       };
     }
 
-    // "[모먼트웍스] 축의대 대행 서비스 계약서(예식일_예식시작시간)_계약자명" 형태의 공통 이름 생성
+    // "[모먼트웍스] 운영 설정서(예식일_예식시작시간)_계약자성함(예식장)" 형태의 공통 이름 생성
     function buildContractName(){
       var date = (document.getElementById('f-date').value || '').replace(/-/g,'');
       var time = (document.getElementById('f-time').value || '').replace(/:/g,'');
       var name = document.getElementById('f-signer-name').value.trim();
-      return '[모먼트웍스] 축의대 대행 서비스 계약서(' + date + '_' + time + ')_' + name;
+      var venue = document.getElementById('f-venue').value.trim();
+      return '[모먼트웍스] 운영 설정서(' + date + '_' + time + ')_' + name + '(' + venue + ')';
     }
 
     // 1페이지(1~3) / 2페이지(4~8) / 3페이지(9~서명)를 각각 개별 캡처하여
@@ -879,7 +922,7 @@
       link.download = fileName;
       link.click();
 
-      var subject = '[모먼트웍스] 축의대 대행 계약서 - ' + name;
+      var subject = buildContractName();
       var mailBody = '방금 다운로드된 계약서 PDF 파일(' + fileName + ')을 이 메일에 첨부하여 전송해 주세요.\n\n계약자: ' + name + '\n연락처: ' + phone;
       var mailUrl = 'mailto:moment_works@naver.com,bn_company@naver.com?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(mailBody);
 
