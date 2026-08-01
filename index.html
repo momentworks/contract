@@ -50,50 +50,42 @@
   .wrap{max-width:560px;margin:0 auto;padding:0 18px;}
 
   .card{
-    background:#fff;border:1px solid #E3DDCF;border-top:3px solid var(--gold);border-radius:10px;
-    padding:24px 20px;margin-top:16px;
-    box-shadow:0 2px 10px rgba(20,15,10,0.05);
+    background:#fff;border:1px solid #E3DDCF;border-radius:6px;
+    padding:24px 20px;margin-top:18px;
   }
   .sec-num{
     display:inline-flex;align-items:center;justify-content:center;
-    width:28px;height:28px;border-radius:50%;
+    width:26px;height:26px;border-radius:50%;
     background:var(--wine);color:#fff;font-family:'Noto Serif KR',serif;font-weight:700;font-size:13px;
-    margin-right:9px;flex-shrink:0;
+    margin-right:8px;flex-shrink:0;
   }
   .sec-title{
     display:flex;align-items:center;font-size:16.5px;font-weight:700;margin-bottom:16px;
     color:var(--ink-text);
   }
 
-  /* FORM FIELDS ===== 16px 고정: iOS Safari 자동 확대 방지, 터치 타깃 44px 이상 확보 ===== */
-  .field{margin-bottom:16px;}
+  /* FORM FIELDS */
+  .field{margin-bottom:14px;}
   .field label{
-    display:block;font-size:13px;color:var(--wine);font-weight:600;margin-bottom:7px;
+    display:block;font-size:12.5px;color:var(--wine);font-weight:600;margin-bottom:6px;
   }
   .field input, .field select, .field textarea{
-    width:100%;min-height:48px;padding:12px 14px;font-size:16px;font-family:'Noto Sans KR',sans-serif;
-    border:1.5px solid #DCD5C6;border-radius:8px;background:var(--ivory-soft);color:var(--ink-text);
-    outline:none;transition:border-color .2s ease, box-shadow .2s ease;
-    -webkit-appearance:none;appearance:none;
+    width:100%;padding:11px 12px;font-size:14.5px;font-family:'Noto Sans KR',sans-serif;
+    border:1px solid #DCD5C6;border-radius:4px;background:var(--ivory-soft);color:var(--ink-text);
+    outline:none;transition:border-color .2s ease;
   }
-  .field select{
-    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='9'><path d='M1 1l6 6 6-6' stroke='%236E2430' stroke-width='1.8' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>");
-    background-repeat:no-repeat;background-position:right 14px center;padding-right:36px;
-  }
-  .field input:focus, .field select:focus, .field textarea:focus{
-    border-color:var(--gold);box-shadow:0 0 0 3px rgba(184,146,90,0.15);
-  }
+  .field input:focus, .field select:focus, .field textarea:focus{border-color:var(--gold);}
   .field input[readonly]{background:#EFEAE0;color:var(--muted);}
   .field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-  .field .hint{font-size:11.5px;color:var(--muted);margin-top:6px;}
+  .field .hint{font-size:11px;color:var(--muted);margin-top:5px;}
 
   /* STATIC TEXT LIST */
   .info-list{list-style:none;}
   .info-list li{
-    font-size:13.5px;color:#3D3830;padding:7px 0 7px 18px;position:relative;line-height:1.7;
+    font-size:13.5px;color:#3D3830;padding:6px 0 6px 18px;position:relative;line-height:1.65;
   }
   .info-list li::before{content:'·';position:absolute;left:0;color:var(--wine);font-weight:700;}
-  .legal p{font-size:13px;color:#4A443C;line-height:1.8;margin-bottom:9px;}
+  .legal p{font-size:13px;color:#4A443C;line-height:1.75;margin-bottom:8px;}
   .legal p:last-child{margin-bottom:0;}
   .legal .num-mark{color:var(--wine);font-weight:700;margin-right:4px;}
 
@@ -102,32 +94,29 @@
   }
   .warn-note{
     font-size:12px;color:var(--wine);margin-top:10px;line-height:1.6;font-weight:600;
-    background:#F6E8E9;padding:10px 12px;border-radius:6px;
+    background:#F6E8E9;padding:8px 12px;border-radius:4px;
   }
 
   /* PAYMENT BOX */
   .pay-box{
-    background:var(--ivory-soft);border:1px dashed #D8CFBA;border-radius:6px;
-    padding:14px 16px;margin-top:10px;font-size:12.5px;color:#4A443C;line-height:1.85;
+    background:var(--ivory-soft);border:1px dashed #D8CFBA;border-radius:4px;
+    padding:14px 16px;margin-top:10px;font-size:12.5px;color:#4A443C;line-height:1.8;
   }
   .pay-box strong{color:var(--wine);}
 
   /* TABLE */
   table.refund{width:100%;border-collapse:collapse;margin-top:10px;font-size:12.5px;}
-  table.refund th, table.refund td{border:1px solid #E3DDCF;padding:10px 8px;text-align:center;}
+  table.refund th, table.refund td{border:1px solid #E3DDCF;padding:9px 8px;text-align:center;}
   table.refund th{background:var(--ivory-soft);color:var(--wine);font-weight:700;font-size:11.5px;}
   table.refund td{color:#3D3830;}
 
-  /* CHECKBOX AGREE ===== 터치 영역 확대 ===== */
+  /* CHECKBOX AGREE */
   .agree{
-    display:flex;align-items:flex-start;gap:12px;margin-top:16px;
-    background:var(--ivory-soft);border-radius:8px;padding:16px;
-    min-height:44px;cursor:pointer;
+    display:flex;align-items:flex-start;gap:10px;margin-top:16px;
+    background:var(--ivory-soft);border-radius:4px;padding:14px;
   }
-  .agree input{
-    width:24px;height:24px;margin-top:0;accent-color:var(--wine);flex-shrink:0;cursor:pointer;
-  }
-  .agree label{font-size:13px;color:#3D3830;line-height:1.65;cursor:pointer;}
+  .agree input{width:18px;height:18px;margin-top:2px;accent-color:var(--wine);flex-shrink:0;}
+  .agree label{font-size:12.5px;color:#3D3830;line-height:1.6;}
 
   /* SEAL */
   .seal-block{
@@ -140,18 +129,16 @@
     width:70px;height:70px;flex-shrink:0;object-fit:contain;
   }
 
-  /* SUBMIT ===== 최소 48px 터치 타깃 ===== */
+  /* SUBMIT */
   .submit-area{margin-top:26px;}
   .btn-submit{
-    display:block;width:100%;min-height:52px;text-align:center;background:var(--wine);color:#fff;
-    font-weight:700;font-size:15.5px;padding:16px;border-radius:8px;border:none;cursor:pointer;
-    letter-spacing:0.02em;box-shadow:0 4px 14px rgba(110,36,48,0.25);
-    transition:transform .15s ease;
+    display:block;width:100%;text-align:center;background:var(--wine);color:#fff;
+    font-weight:700;font-size:15px;padding:16px;border-radius:4px;border:none;cursor:pointer;
+    letter-spacing:0.02em;
   }
-  .btn-submit:active{transform:scale(0.98);}
   .btn-copy{
-    display:block;width:100%;min-height:46px;text-align:center;background:transparent;color:var(--muted);
-    font-weight:500;font-size:13px;padding:12px;border:1.5px solid #DCD5C6;border-radius:8px;
+    display:block;width:100%;text-align:center;background:transparent;color:var(--muted);
+    font-weight:500;font-size:12.5px;padding:12px;border:1px solid #DCD5C6;border-radius:4px;
     margin-top:10px;cursor:pointer;
   }
   .submit-note{font-size:11.5px;color:var(--muted);text-align:center;margin-top:10px;line-height:1.6;}
@@ -159,28 +146,23 @@
   .footer-mark{text-align:center;margin-top:30px;font-size:11px;color:var(--muted);}
 
   /* ===== MOBILE REFINEMENTS ===== */
-  /* 대부분의 스마트폰(최대 480px)에서 2열 입력을 1열로 정리 - 카드형 배열 */
-  @media(max-width:480px){
-    .top{padding:28px 16px 22px;}
+  @media(max-width:400px){
+    .top{padding:30px 16px 24px;}
     .top h1{font-size:18px;}
-    .top p{font-size:12px;}
     .wrap{padding:0 12px;}
-    .card{padding:20px 16px;margin-top:14px;border-radius:8px;}
-    .sec-title{font-size:15.5px;margin-bottom:14px;}
+    .card{padding:20px 15px;margin-top:14px;}
+    .sec-title{font-size:15.5px;}
     .field-row{grid-template-columns:1fr;gap:0;}
-    .field-row .field{margin-bottom:16px;}
-    .field-row .field:last-child{margin-bottom:16px;}
-    table.refund{font-size:11px;}
-    table.refund th, table.refund td{padding:8px 5px;}
+    .field-row .field{margin-bottom:14px;}
+    .field-row .field:last-child{margin-bottom:14px;}
+    .field input, .field select, .field textarea{font-size:15px;padding:12px;}
+    table.refund{font-size:11.5px;}
+    table.refund th, table.refund td{padding:7px 5px;}
     .seal-block{flex-direction:column;align-items:flex-start;gap:14px;}
     .seal-img{align-self:center;}
-    .agree{padding:14px;}
-    .btn-submit, .btn-copy{font-size:15px;}
   }
-  @media(max-width:340px){
-    .top h1{font-size:16.5px;}
-    .card{padding:18px 14px;}
-    .sec-title{font-size:14.5px;}
+  @media(min-width:401px) and (max-width:480px){
+    .card{padding:22px 17px;}
   }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -208,8 +190,17 @@
           <input type="date" id="f-date">
         </div>
         <div class="field">
-          <label for="f-time">예식시간</label>
-          <input type="time" id="f-time">
+          <label for="f-time-hour">예식시간</label>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <select id="f-time-hour" onchange="momentWorksUpdateTime()" style="flex:1;">
+              <option value="">시</option>
+            </select>
+            <span style="color:var(--muted);">:</span>
+            <select id="f-time-min" onchange="momentWorksUpdateTime()" style="flex:1;">
+              <option value="">분</option>
+            </select>
+          </div>
+          <input type="hidden" id="f-time">
         </div>
       </div>
 
@@ -227,22 +218,6 @@
       <div class="field">
         <label for="f-client">계약자 (신랑측 또는 신부측 대표)</label>
         <input type="text" id="f-client" placeholder="예: (신부) 홍길동">
-      </div>
-
-      <div class="field">
-        <label for="f-client-phone">연락처</label>
-        <input type="tel" id="f-client-phone" placeholder="010-0000-0000">
-      </div>
-
-      <div class="field-row">
-        <div class="field">
-          <label for="f-groom-name-info">(신랑) 성함</label>
-          <input type="text" id="f-groom-name-info" placeholder="성함">
-        </div>
-        <div class="field">
-          <label for="f-bride-name-info">(신부) 성함</label>
-          <input type="text" id="f-bride-name-info" placeholder="성함">
-        </div>
       </div>
 
       <div class="field">
@@ -300,29 +275,13 @@
     <div class="card">
       <div class="sec-title"><span class="sec-num">3</span>계약금 및 결제</div>
 
-      <div class="field">
-        <label for="f-base-amount-confirm">기준금액 (원)</label>
-        <input type="text" id="f-base-amount-confirm" placeholder="1번 항목에서 한측/양측/통합 선택 시 자동 입력" readonly>
-      </div>
-
       <div class="agree" style="margin-top:0;margin-bottom:14px;">
         <input type="checkbox" id="f-earlybird" onchange="momentWorksCalcTotal()">
         <label for="f-earlybird"><strong>얼리버드 할인 적용</strong> (상담 후 5일 이내 예약 확정 · 20,000원 할인)</label>
       </div>
 
       <div class="field">
-        <label for="f-partner-code">짝꿍코드(추천인 코드 / 선택항목)</label>
-        <input type="text" id="f-partner-code" placeholder="짝꿍코드가 있으시면 입력해 주세요" oninput="momentWorksCalcTotal()">
-        <p class="hint">짝꿍코드 입력 시 계약금액에서 10,000원이 추가 할인됩니다.</p>
-      </div>
-
-      <div class="field">
-        <label for="f-special-discount">특별 할인 금액 (원)</label>
-        <input type="text" id="f-special-discount" placeholder="0" readonly>
-      </div>
-
-      <div class="field">
-        <label for="f-total">계약금액 (원) <span style="color:var(--muted);font-weight:400;">※ 기준금액 - 특별 할인 금액</span></label>
+        <label for="f-total">계약금액 (원) <span style="color:var(--muted);font-weight:400;">※ 기준금액 기준 자동 계산</span></label>
         <input type="text" id="f-total" placeholder="한측/양측/통합 선택 시 자동 입력" readonly>
       </div>
 
@@ -406,9 +365,16 @@
       <div class="sec-title"><span class="sec-num">9</span>기타사항</div>
       <div class="legal">
         <p><span class="num-mark">①</span>세부 운영사항은 고객이 제출한 「Moment Works 축의대 대행 운영 설정서」에 따른다.</p>
-        <p><span class="num-mark">②</span>운영 설정서에 기재된 내용은 본 계약의 일부로 간주하며, 양 당사자는 해당 내용에 따라 서비스를 진행한다.</p>
-        <p><span class="num-mark">③</span>계약 리뷰 이벤트는 계약일로부터 3개월 이내 작성하여야 하며, 본식 진행 리뷰 이벤트는 예식일로부터 2개월 이내 작성하여야 한다. 해당 기간이 경과한 경우에는 리뷰 이벤트 참여 및 혜택 제공이 제한될 수 있다.</p>
-        <p><span class="num-mark">④</span>계약자 할인 짝꿍코드는 계약 체결 시 계약서에 기재된 코드만 유효하며, 계약 체결 이후 코드의 변경, 추가 적용 또는 소급 적용은 불가하다.</p>
+        <p><span class="num-mark">②</span>운영 설정서에 기재된 내용은 본 계약의 일부로 간주하며, 양 당사자는 이에 따라 서비스를 진행한다.</p>
+      </div>
+    </div>
+
+    <!-- 10. 짝꿍코드 -->
+    <div class="card">
+      <div class="sec-title"><span class="sec-num">10</span>짝꿍코드</div>
+      <div class="field">
+        <label for="f-partner-code">짝꿍코드 <span style="color:var(--muted);font-weight:400;">※ 계약 정보 입력 시 자동 생성</span></label>
+        <input type="text" id="f-partner-code" placeholder="자동으로 생성됩니다." readonly>
       </div>
     </div>
 
@@ -422,25 +388,24 @@
       </div>
 
       <p style="font-size:13px;font-weight:700;color:var(--wine);margin:16px 0 10px;">(위탁자)</p>
-      <p class="hint" style="margin:-6px 0 10px;">※ 계약자 성함/연락처/신랑/신부는 상단 "계약 정보"에 입력한 값이 자동으로 반영됩니다.</p>
 
       <div class="field">
         <label for="f-signer-name">계약자 성함</label>
-        <input type="text" id="f-signer-name" placeholder="성함을 입력해 주세요" required readonly>
+        <input type="text" id="f-signer-name" placeholder="성함을 입력해 주세요" required>
       </div>
       <div class="field">
         <label for="f-signer-phone">연락처</label>
-        <input type="tel" id="f-signer-phone" placeholder="010-0000-0000" required readonly>
+        <input type="tel" id="f-signer-phone" placeholder="010-0000-0000" required>
       </div>
 
       <div class="field-row">
         <div class="field">
           <label for="f-groom-name">(신랑)</label>
-          <input type="text" id="f-groom-name" placeholder="성함" readonly>
+          <input type="text" id="f-groom-name" placeholder="성함">
         </div>
         <div class="field">
           <label for="f-bride-name">(신부)</label>
-          <input type="text" id="f-bride-name" placeholder="성함" readonly>
+          <input type="text" id="f-bride-name" placeholder="성함">
         </div>
       </div>
 
@@ -464,7 +429,7 @@
     <div class="submit-area">
       <button type="button" class="btn-submit" onclick="momentWorksSubmitContract()">계약서 제출하기</button>
       <button type="button" class="btn-copy" onclick="momentWorksCopyContract()">계약 내용 복사하기</button>
-      <p class="submit-note">제출하기를 누르신 후 전송까지 다소 시간이 소요될 수 있습니다.<br>잠시만 기다려주세요. 감사합니다. :)</p>
+      <p class="submit-note">제출하기를 누르면 입력하신 계약 내용이 <strong>계약서 PDF 파일로 자동 생성·다운로드</strong>되고, 이어서 이메일 작성 화면이 열립니다. 열린 이메일 화면에 방금 다운로드된 PDF 파일을 첨부한 뒤 전송해 주세요.<br>(수신: moment_works@naver.com, bn_company@naver.com)</p>
     </div>
     </form>
 
@@ -494,7 +459,7 @@
 
         const timeVal = document.getElementById('f-time').value; // 'HH:MM'
         const hour = timeVal ? parseInt(timeVal.split(':')[0], 10) : 12;
-        const session = (hour < 12) ? 'AM' : 'PM';
+        const session = (hour < 12) ? 'AM' : 'PM'; // 1차/2차
 
         const venue = (document.getElementById('f-venue') ? document.getElementById('f-venue').value : '').trim();
         const hall = (document.getElementById('f-hall') ? document.getElementById('f-hall').value : '').trim();
@@ -518,13 +483,13 @@
         if(existing){
           const { error: updErr } = await scheduleDb
             .from('schedules')
-            .update({ region, memo })
+            .update({ region, venue, memo })
             .eq('id', existing.id);
           if(updErr) throw updErr;
         } else {
           const { error: insErr } = await scheduleDb
             .from('schedules')
-            .insert({ date, session, region, status: 'confirmed', memo });
+            .insert({ date, session, region, venue, status: 'confirmed', memo });
           if(insErr) throw insErr;
         }
       } catch(e){
@@ -535,14 +500,6 @@
 
     function pad(n){ return n.toString().padStart(2,'0'); }
     function fmtDate(d){ return d.getFullYear()+'.'+pad(d.getMonth()+1)+'.'+pad(d.getDate()); }
-    // 'YYYY-MM-DD' 형식의 날짜 문자열에 요일을 붙여서 반환 (예: 2026-05-16 -> 2026-05-16 (토))
-    function fmtDateWithDay(iso){
-      if(!iso || iso === '-'){ return iso || '-'; }
-      var d = new Date(iso + 'T00:00:00');
-      if(isNaN(d.getTime())){ return iso; }
-      var days = ['일','월','화','수','목','금','토'];
-      return iso + ' (' + days[d.getDay()] + ')';
-    }
 
     // default today's date for consult/contract date fields
     (function(){
@@ -550,29 +507,38 @@
       var iso = today.getFullYear()+'-'+pad(today.getMonth()+1)+'-'+pad(today.getDate());
       document.getElementById('f-consult-date').value = iso;
       document.getElementById('f-contract-date').value = iso;
-      document.getElementById('f-deposit-date').value = iso;
     })();
 
-    // "계약 정보"에 입력한 값을 "계약일자 및 서명" 영역에 실시간으로 자동 반영
+    // 예식시간: 시(0~23) / 분(10분 단위) 옵션 채우기
     (function(){
-      var syncPairs = [
-        ['f-client', 'f-signer-name'],
-        ['f-client-phone', 'f-signer-phone'],
-        ['f-groom-name-info', 'f-groom-name'],
-        ['f-bride-name-info', 'f-bride-name']
-      ];
-      syncPairs.forEach(function(pair){
-        var source = document.getElementById(pair[0]);
-        var target = document.getElementById(pair[1]);
-        source.addEventListener('input', function(){
-          target.value = source.value;
-        });
-      });
+      var hourSel = document.getElementById('f-time-hour');
+      for(var h=0; h<24; h++){
+        var opt = document.createElement('option');
+        opt.value = pad(h);
+        opt.textContent = pad(h) + '시';
+        hourSel.appendChild(opt);
+      }
+      var minSel = document.getElementById('f-time-min');
+      for(var m=0; m<60; m+=10){
+        var mopt = document.createElement('option');
+        mopt.value = pad(m);
+        mopt.textContent = pad(m) + '분';
+        minSel.appendChild(mopt);
+      }
     })();
+
+    // 시/분 select 값을 합쳐 hidden input(f-time)에 반영
+    function momentWorksUpdateTime(){
+      var h = document.getElementById('f-time-hour').value;
+      var m = document.getElementById('f-time-min').value;
+      document.getElementById('f-time').value = (h && m) ? (h + ':' + m) : '';
+      momentWorksGeneratePartnerCode();
+    }
 
     // auto-calc refund cutoff dates when wedding date changes
     document.getElementById('f-date').addEventListener('change', function(){
       var val = this.value;
+      momentWorksGeneratePartnerCode();
       if(!val){ return; }
       var wedding = new Date(val + 'T00:00:00');
 
@@ -584,6 +550,79 @@
       document.getElementById('cut-30').innerHTML = '예식일 30일~59일 이전<br><span style="color:var(--muted);font-weight:400;">(' + fmtDate(d30) + '까지)</span>';
       document.getElementById('cut-29').innerHTML = '예식일 29일 이전부터<br><span style="color:var(--muted);font-weight:400;">(' + fmtDate(d29) + '부터)</span>';
     });
+
+    // ====== 10. 짝꿍코드 자동 생성 ======
+    // 국어의 로마자 표기법(개정) 기준 초성/중성 표
+    var HANGUL_CHO = ["g","kk","n","d","tt","r","m","b","pp","s","ss","","j","jj","ch","k","t","p","h"];
+    var HANGUL_JUNG = ["a","ae","ya","yae","eo","e","yeo","ye","o","wa","wae","oe","yo","u","wo","we","wi","yu","eu","ui","i"];
+
+    // 한글 음절 한 글자를 로마자로 변환한 뒤 첫 글자(이니셜)를 대문자로 반환
+    function momentWorksRomanizeInitial(ch){
+      if(!ch) return '';
+      var code = ch.charCodeAt(0) - 0xAC00;
+      if(code < 0 || code > 11171){
+        // 한글 음절이 아니면(영문 등) 첫 글자를 그대로 대문자로 사용
+        return ch.charAt(0).toUpperCase();
+      }
+      var choIdx = Math.floor(code / (21 * 28));
+      var jungIdx = Math.floor((code % (21 * 28)) / 28);
+      var romanized = HANGUL_CHO[choIdx] + HANGUL_JUNG[jungIdx];
+      return romanized.charAt(0).toUpperCase();
+    }
+
+    // "계약자" 입력값에서 성(이름의 맨 앞 문자)만 추출 (예: "(신부) 홍길동" -> "홍")
+    function momentWorksExtractSurnameChar(clientName){
+      var cleaned = (clientName || '').replace(/\([^)]*\)/g, '').trim();
+      return cleaned.charAt(0) || '';
+    }
+
+    // "1. 계약 정보" 항목이 모두 입력되었는지 확인
+    function momentWorksSection1Complete(){
+      var ids = ['f-date','f-time','f-venue','f-hall','f-client','f-consult-date','f-groom-guests','f-bride-guests','f-side'];
+      for(var i=0; i<ids.length; i++){
+        if(!document.getElementById(ids[i]).value){ return false; }
+      }
+      return true;
+    }
+
+    // 짝꿍코드 = MW + 계약자 성 이니셜 + 계약일자(YYMMDD) + 연락처 끝 2자리
+    function momentWorksGeneratePartnerCode(){
+      var codeField = document.getElementById('f-partner-code');
+      if(!momentWorksSection1Complete()){
+        codeField.value = '';
+        return;
+      }
+
+      var surnameChar = momentWorksExtractSurnameChar(document.getElementById('f-client').value);
+      var initial = momentWorksRomanizeInitial(surnameChar);
+
+      var contractDate = document.getElementById('f-contract-date').value;
+      var dateDigits = '';
+      if(contractDate){
+        var parts = contractDate.split('-');
+        if(parts.length === 3){
+          dateDigits = parts[0].slice(2, 4) + parts[1] + parts[2];
+        }
+      }
+
+      var phoneDigits = (document.getElementById('f-signer-phone').value || '').replace(/[^0-9]/g, '');
+      var last2 = phoneDigits.slice(-2);
+
+      if(!initial || dateDigits.length !== 6 || last2.length !== 2){
+        codeField.value = '(계약일자 · 연락처 입력 시 자동 완성)';
+        return;
+      }
+
+      codeField.value = 'MW' + initial + dateDigits + last2;
+    }
+
+    // 짝꿍코드 구성에 영향을 주는 입력값이 바뀔 때마다 재생성
+    ['f-venue','f-hall','f-client','f-consult-date','f-groom-guests','f-bride-guests','f-contract-date','f-signer-phone'].forEach(function(id){
+      var el = document.getElementById(id);
+      el.addEventListener('input', momentWorksGeneratePartnerCode);
+      el.addEventListener('change', momentWorksGeneratePartnerCode);
+    });
+    document.getElementById('f-side').addEventListener('change', momentWorksGeneratePartnerCode);
 
     var SIDE_INFO = {
       '한측':  { amount: 315000, guests: '250명' },
@@ -597,11 +636,9 @@
       if(info){
         document.getElementById('f-base-guests').value = info.guests;
         document.getElementById('f-base-amount').value = info.amount;
-        document.getElementById('f-base-amount-confirm').value = info.amount;
       } else {
         document.getElementById('f-base-guests').value = '';
         document.getElementById('f-base-amount').value = '';
-        document.getElementById('f-base-amount-confirm').value = '';
       }
       momentWorksCalcTotal();
     }
@@ -609,15 +646,7 @@
     function momentWorksCalcTotal(){
       var base = parseInt(document.getElementById('f-base-amount').value) || 0;
       var earlybird = document.getElementById('f-earlybird').checked;
-      var partnerCode = document.getElementById('f-partner-code').value.trim();
-
-      var earlybirdDiscount = earlybird ? 20000 : 0;
-      var partnerDiscount = partnerCode ? 10000 : 0;
-      var specialDiscount = earlybirdDiscount + partnerDiscount;
-
-      document.getElementById('f-special-discount').value = base > 0 ? specialDiscount : '';
-
-      var total = base > 0 ? (base - specialDiscount) : 0;
+      var total = base > 0 ? (earlybird ? base - 20000 : base) : 0;
       document.getElementById('f-total').value = total > 0 ? total : '';
       momentWorksCalcBalance();
     }
@@ -635,7 +664,7 @@
         '[MOMENT WORKS 축의대 대행 서비스 계약서]',
         '',
         '▷ 계약 정보',
-        '예식일: ' + fmtDateWithDay(v('f-date')),
+        '예식일: ' + v('f-date'),
         '예식시간: ' + v('f-time'),
         '예식장: ' + v('f-venue'),
         '홀명: ' + v('f-hall'),
@@ -661,170 +690,92 @@
       return lines.join('\n');
     }
 
-    function pdfCell(text, isLabel, width){
-      return '<div style="width:' + width + 'px;box-sizing:border-box;padding:9px 10px;border-right:1px solid #ccc;border-bottom:1px solid #ccc;'
-        + 'background:' + (isLabel ? '#F7F4EE' : '#fff') + ';font-weight:' + (isLabel ? '700' : '400') + ';'
-        + 'word-break:break-word;line-height:1.5;">' + (text || '-') + '</div>';
-    }
-    function pdfRow4(l1,v1,l2,v2){
-      return '<div style="display:flex;border-left:1px solid #ccc;border-top:1px solid #ccc;">'
-        + pdfCell(l1,true,140) + pdfCell(v1,false,170) + pdfCell(l2,true,140) + pdfCell(v2,false,170)
-        + '</div>';
-    }
-    function pdfRowFull(l1,v1){
-      return '<div style="display:flex;border-left:1px solid #ccc;border-top:1px solid #ccc;">'
-        + pdfCell(l1,true,140) + pdfCell(v1,false,480)
-        + '</div>';
-    }
-    function pdfSectionTitle(text){
-      return '<div style="font-size:14px;font-weight:700;border-bottom:2px solid #6E2430;padding:0 0 6px 0;margin:26px 0 10px 0;">' + text + '</div>';
-    }
-    function pdfPara(html){
-      return '<p style="margin:0 0 16px 0;line-height:1.75;">' + html + '</p>';
-    }
-    // 금액 문자열을 천 단위 콤마 표기로 변환 (숫자가 아니면 원본 그대로 반환)
-    function fmtMoney(val){
-      var n = parseInt((val || '').toString().replace(/[^0-9-]/g, ''), 10);
-      if(isNaN(n)){ return val || '-'; }
-      return n.toLocaleString('ko-KR');
-    }
-    // 조항 내 문장(①②③...)을 각각 별도 문단으로 분리하여 문장 간 간격을 확보 (가독성 개선용)
-    function pdfParaList(sentences){
-      return '<div style="margin:0 0 16px 0;">'
-        + sentences.map(function(s){
-            return '<p style="margin:0 0 8px 0;line-height:1.8;">' + s + '</p>';
-          }).join('')
-        + '</div>';
-    }
-
-    // PDF 페이지 구성: 1페이지(제목+1~3), 2페이지(4~8), 3페이지(9~서명) - 총 3페이지 고정
-    function buildPrintablePages(){
+    function buildPrintableDocument(){
       var v = function(id){ return document.getElementById(id).value || '-'; };
       var agreeText = document.getElementById('f-agree').checked ? '계약금 입금으로 서명을 갈음함 (동의함)' : '(미동의)';
-      var sealEl = document.querySelector('.seal-img');
-      var sealSrc = sealEl ? sealEl.getAttribute('src') : '';
 
-      var pageOpen = '<div style="font-family:\'Noto Sans KR\',sans-serif;color:#1a1a1a;width:700px;padding:40px;background:#fff;font-size:13px;line-height:1.5;box-sizing:border-box;">';
-      var pageClose = '</div>';
+      var html = ''
+        + '<div style="font-family:\'Noto Sans KR\',sans-serif;color:#1a1a1a;width:700px;padding:40px;background:#fff;font-size:13px;line-height:1.7;">'
+        + '<h1 style="text-align:center;font-size:20px;margin-bottom:24px;">MOMENT WORKS 축의대 대행 서비스 계약서</h1>'
 
-      // ===== 1페이지: 제목 + 1~3. 계약 정보 / 서비스 범위 / 계약금 및 결제 =====
-      var page1 = pageOpen
-        + '<h1 style="text-align:center;font-size:20px;margin:0 0 24px 0;">MOMENT WORKS 축의대 대행 서비스 계약서</h1>'
+        + '<h3 style="font-size:14px;border-bottom:2px solid #6E2430;padding-bottom:4px;margin-bottom:8px;">1. 계약 정보</h3>'
+        + '<table style="width:100%;border-collapse:collapse;margin-bottom:18px;" border="1" cellpadding="6">'
+        + '<tr><td style="width:22%;background:#F7F4EE;">예식일</td><td style="width:28%;">' + v('f-date') + '</td><td style="width:22%;background:#F7F4EE;">예식시간</td><td style="width:28%;">' + v('f-time') + '</td></tr>'
+        + '<tr><td style="background:#F7F4EE;">예식장</td><td>' + v('f-venue') + '</td><td style="background:#F7F4EE;">홀명</td><td>' + v('f-hall') + '</td></tr>'
+        + '<tr><td style="background:#F7F4EE;">계약자</td><td colspan="3">' + v('f-client') + '</td></tr>'
+        + '<tr><td style="background:#F7F4EE;">상담일</td><td>' + v('f-consult-date') + '</td><td style="background:#F7F4EE;">한측/양측/통합</td><td>' + v('f-side') + '</td></tr>'
+        + '<tr><td style="background:#F7F4EE;">신랑 하객인원</td><td>' + v('f-groom-guests') + '명</td><td style="background:#F7F4EE;">신부 하객인원</td><td>' + v('f-bride-guests') + '명</td></tr>'
+        + '<tr><td style="background:#F7F4EE;">기준인원</td><td>' + v('f-base-guests') + '</td><td style="background:#F7F4EE;">기준금액</td><td>' + v('f-base-amount') + '원</td></tr>'
+        + '</table>'
 
-        + pdfSectionTitle('1. 계약 정보').replace('margin:26px', 'margin:0px')
-        + pdfRow4('예식일', fmtDateWithDay(v('f-date')), '예식시간', v('f-time'))
-        + pdfRow4('예식장', v('f-venue'), '홀명', v('f-hall'))
-        + pdfRowFull('계약자', v('f-client'))
-        + pdfRow4('상담일', v('f-consult-date'), '한측/양측/통합', v('f-side'))
-        + pdfRow4('신랑 하객인원', v('f-groom-guests') + '명', '신부 하객인원', v('f-bride-guests') + '명')
-        + pdfRow4('기준인원', v('f-base-guests'), '기준금액', fmtMoney(v('f-base-amount')) + '원')
-
-        + pdfSectionTitle('2. 서비스 범위')
-        + '<ul style="margin:0 0 4px 0;padding-left:20px;">'
-        + '<li style="padding:3px 0;">축의금 접수 및 기록</li>'
-        + '<li style="padding:3px 0;">하객 응대</li>'
-        + '<li style="padding:3px 0;">식권 배부</li>'
-        + '<li style="padding:3px 0;">축의금 정산 및 인계</li>'
-        + '<li style="padding:3px 0;">축의금 인계</li>'
-        + '<li style="padding:3px 0;">「Moment Works 축의대 대행 운영 설정서」에 따른 기타 업무 (예식 30일 이전 별도 송부)</li>'
+        + '<h3 style="font-size:14px;border-bottom:2px solid #6E2430;padding-bottom:4px;margin-bottom:8px;">2. 서비스 범위</h3>'
+        + '<ul style="margin:0 0 18px 20px;padding:0;">'
+        + '<li>축의금 접수 및 기록</li><li>하객 응대</li><li>식권 배부</li><li>축의금 정산 및 인계</li><li>축의금 인계</li>'
+        + '<li>「Moment Works 축의대 대행 운영 설정서」에 따른 기타 업무 (예식 30일 이전 별도 송부)</li>'
         + '</ul>'
 
-        + pdfSectionTitle('3. 계약금 및 결제')
-        + pdfRowFull('기준금액', fmtMoney(v('f-base-amount-confirm')) + '원')
-        + pdfRowFull('얼리버드 할인 적용', document.getElementById('f-earlybird').checked ? '적용 (20,000원 할인)' : '미적용')
-        + pdfRowFull('짝꿍코드', v('f-partner-code') !== '-' ? (v('f-partner-code') + ' (10,000원 할인 적용)') : '미입력')
-        + pdfRowFull('특별 할인 금액', fmtMoney(v('f-special-discount')) + '원')
-        + pdfRowFull('계약금액', fmtMoney(v('f-total')) + '원')
-        + pdfRowFull('계약금 / 입금일', fmtMoney(v('f-deposit')) + '원 / ' + v('f-deposit-date'))
-        + pdfRowFull('잔금 (예식일 포함 2일 이내 정산)', fmtMoney(v('f-balance')) + '원')
-        + '<p style="font-size:11.5px;color:#555;margin:10px 0 4px 0;line-height:1.7;">계약금 납부 계좌: 카카오뱅크 3333-37-9293260 / 예금주: 김현관(모먼트웍스)</p>'
-        + '<p style="font-size:11.5px;color:#555;margin:0;line-height:1.7;">잔금은 할인 혜택 적용에 따라 변동(차감)될 수 있습니다.</p>'
+        + '<h3 style="font-size:14px;border-bottom:2px solid #6E2430;padding-bottom:4px;margin-bottom:8px;">3. 계약금 및 결제</h3>'
+        + '<table style="width:100%;border-collapse:collapse;margin-bottom:6px;" border="1" cellpadding="6">'
+        + '<tr><td style="width:30%;background:#F7F4EE;">얼리버드 할인 적용</td><td>' + (document.getElementById('f-earlybird').checked ? '적용 (20,000원 할인)' : '미적용') + '</td></tr>'
+        + '<tr><td style="background:#F7F4EE;">계약금액</td><td>' + v('f-total') + '원</td></tr>'
+        + '<tr><td style="background:#F7F4EE;">계약금 / 입금일</td><td>' + v('f-deposit') + '원 / ' + v('f-deposit-date') + '</td></tr>'
+        + '<tr><td style="background:#F7F4EE;">잔금 (예식일 포함 2일 이내 정산)</td><td>' + v('f-balance') + '원</td></tr>'
+        + '</table>'
+        + '<p style="font-size:11.5px;color:#555;margin-bottom:18px;">계약금 납부 계좌: 카카오뱅크 3333-37-9293260 / 예금주: 김현관(모먼트웍스)<br>잔금은 할인 혜택 적용에 따라 변동(차감)될 수 있습니다.</p>'
 
-        + pageClose;
+        + '<h3 style="font-size:14px;border-bottom:2px solid #6E2430;padding-bottom:4px;margin-bottom:8px;">4. 계약의 성립</h3>'
+        + '<p style="margin-bottom:18px;">① 본 계약은 위탁자가 계약 내용을 확인한 후 계약금을 납부한 시점에 성립한 것으로 본다.<br>'
+        + '② 위탁자가 계약금을 납부한 경우, 본 계약의 모든 내용을 충분히 확인하고 이에 동의한 것으로 본다. 또한 계약금의 납부는 계약 내용 또는 날인에 갈음하는 의사표시로 보며, 별도의 서명 또는 날인이 없더라도 본 계약은 유효하게 성립하고 그 효력을 가진다.</p>'
 
-      // ===== 2페이지: 4~8. 계약의 성립 / 취소 및 환불 / 손해배상 / 책임 및 면책 / 개인정보 =====
-      var page2 = pageOpen
-        + pdfSectionTitle('4. 계약의 성립').replace('margin:26px', 'margin:0px')
-        + pdfParaList([
-            '① 본 계약은 위탁자가 계약 내용을 확인한 후 계약금을 납부한 시점에 성립한 것으로 본다.',
-            '② 위탁자가 계약금을 납부한 경우, 본 계약의 모든 내용을 충분히 확인하고 이에 동의한 것으로 본다. 또한 계약금의 납부는 계약 내용 또는 날인에 갈음하는 의사표시로 보며, 별도의 서명 또는 날인이 없더라도 본 계약은 유효하게 성립하고 그 효력을 가진다.'
-          ])
+        + '<h3 style="font-size:14px;border-bottom:2px solid #6E2430;padding-bottom:4px;margin-bottom:8px;">5. 취소 및 환불 규정</h3>'
+        + '<table style="width:100%;border-collapse:collapse;margin-bottom:18px;" border="1" cellpadding="6">'
+        + '<tr style="background:#F7F4EE;"><td>취소 시점</td><td>환불</td></tr>'
+        + '<tr><td>' + document.getElementById('cut-60').innerText + '</td><td>계약금액의 100%</td></tr>'
+        + '<tr><td>' + document.getElementById('cut-30').innerText + '</td><td>계약금액의 50%</td></tr>'
+        + '<tr><td>' + document.getElementById('cut-29').innerText + '</td><td>계약금액 환불 불가</td></tr>'
+        + '</table>'
 
-        + pdfSectionTitle('5. 취소 및 환불 규정')
-        + pdfRowFull('취소 시점', '환불')
-        + pdfRowFull(document.getElementById('cut-60').innerHTML, '계약금액의 100%')
-        + pdfRowFull(document.getElementById('cut-30').innerHTML.replace('59일 이전', '59일<br>이전'), '계약금액의 50%')
-        + pdfRowFull(document.getElementById('cut-29').innerHTML, '계약금액 환불 불가')
+        + '<h3 style="font-size:14px;border-bottom:2px solid #6E2430;padding-bottom:4px;margin-bottom:8px;">6. 수탁자의 귀책사유에 따른 계약 해지 및 손해배상</h3>'
+        + '<p style="margin-bottom:18px;">① 수탁자의 귀책사유로 계약을 일방적으로 해지하거나 정당한 사유 없이 계약상 서비스를 제공하지 못한 경우, 수탁자는 위탁자에게 기납부된 계약금을 전액 환불하고, 추가로 계약금 상당액을 보상금으로 지급한다.<br>'
+        + '단, 천재지변, 전쟁, 정부의 명령 또는 조치, 감염병 확산에 따른 제한, 교통·통신의 마비 등 수탁자가 합리적으로 예측하거나 통제할 수 없는 불가항력적인 사유로 서비스를 제공하지 못한 경우에는 본 조를 적용하지 않는다.</p>'
 
-        + pdfSectionTitle('6. 수탁자의 귀책사유에 따른 계약 해지 및 손해배상')
-        + pdfParaList([
-            '① 수탁자의 귀책사유로 계약을 일방적으로 해지하거나 정당한 사유 없이 계약상 서비스를 제공하지 못한 경우, 수탁자는 위탁자에게 기납부된 계약금을 전액 환불하고, 추가로 계약금 상당액을 보상금으로 지급한다.',
-            '단, 천재지변, 전쟁, 정부의 명령 또는 조치, 감염병 확산에 따른 제한, 교통·통신의 마비 등 수탁자가 합리적으로 예측하거나 통제할 수 없는 불가항력적인 사유로 서비스를 제공하지 못한 경우에는 본 조를 적용하지 않는다.'
-          ])
+        + '<h3 style="font-size:14px;border-bottom:2px solid #6E2430;padding-bottom:4px;margin-bottom:8px;">7. 책임 및 면책</h3>'
+        + '<p style="margin-bottom:18px;">① 회사는 계약된 범위 내에서 선량한 관리자의 주의의무를 다하여 서비스를 제공합니다.<br>'
+        + '② 축의금은 기록 후 대리인(사전협의)에게 인계하며, 인계확인서 서명완료 시 관리 책임은 고객에게 이전됩니다.<br>'
+        + '③ 천재지변 등 불가항력 사유는 상호 협의합니다.</p>'
 
-        + pdfSectionTitle('7. 책임 및 면책')
-        + pdfParaList([
-            '① 회사는 계약된 범위 내에서 선량한 관리자의 주의의무를 다하여 서비스를 제공합니다.',
-            '② 축의금은 기록 후 대리인(사전협의)에게 인계하며, 인계확인서 서명완료 시 관리 책임은 고객에게 이전됩니다.',
-            '③ 천재지변 등 불가항력 사유는 상호 협의합니다.'
-          ])
+        + '<h3 style="font-size:14px;border-bottom:2px solid #6E2430;padding-bottom:4px;margin-bottom:8px;">8. 개인정보</h3>'
+        + '<p style="margin-bottom:18px;">① 서비스 제공 목적 외에는 개인정보를 사용하지 않으며 관련 법령에 따라 관리합니다.</p>'
 
-        + pdfSectionTitle('8. 개인정보')
-        + pdfParaList(['① 서비스 제공 목적 외에는 개인정보를 사용하지 않으며 관련 법령에 따라 관리합니다.'])
+        + '<h3 style="font-size:14px;border-bottom:2px solid #6E2430;padding-bottom:4px;margin-bottom:8px;">9. 기타사항</h3>'
+        + '<p style="margin-bottom:24px;">① 세부 운영사항은 고객이 제출한 「Moment Works 축의대 대행 운영 설정서」에 따른다.<br>'
+        + '② 운영 설정서에 기재된 내용은 본 계약의 일부로 간주하며, 양 당사자는 이에 따라 서비스를 진행한다.</p>'
 
-        + pageClose;
+        + '<p style="text-align:center;margin-bottom:24px;">계약일자: ' + v('f-contract-date') + '</p>'
 
-      // ===== 3페이지: 9. 기타사항 ~ 계약일자 및 서명 =====
-      var page3 = pageOpen
-        + pdfSectionTitle('9. 기타사항').replace('margin:26px', 'margin:0px')
-        + pdfParaList([
-            '① 세부 운영사항은 고객이 제출한 「Moment Works 축의대 대행 운영 설정서」에 따른다.',
-            '② 운영 설정서에 기재된 내용은 본 계약의 일부로 간주하며, 양 당사자는 해당 내용에 따라 서비스를 진행한다.',
-            '③ 계약 리뷰 이벤트는 계약일로부터 3개월 이내 작성하여야 하며, 본식 진행 리뷰 이벤트는 예식일로부터 2개월 이내 작성하여야 한다. 해당 기간이 경과한 경우에는 리뷰 이벤트 참여 및 혜택 제공이 제한될 수 있다.',
-            '④ 계약자 할인 짝꿍코드는 계약 체결 시 계약서에 기재된 코드만 유효하며, 계약 체결 이후 코드의 변경, 추가 적용 또는 소급 적용은 불가하다.'
-          ])
+        + '<table style="width:100%;border-collapse:collapse;">'
+        + '<tr>'
+        + '<td style="width:50%;vertical-align:top;padding-right:16px;">'
+        + '<p style="font-weight:700;color:#6E2430;margin-bottom:8px;">(위탁자)</p>'
+        + '<p>계약자: ' + v('f-signer-name') + '</p>'
+        + '<p>연락처: ' + v('f-signer-phone') + '</p>'
+        + '<p>서명: ' + agreeText + '</p>'
+        + '<p style="margin-top:8px;">(신랑) ' + v('f-groom-name') + '&nbsp;&nbsp;&nbsp;(신부) ' + v('f-bride-name') + '</p>'
+        + '</td>'
+        + '<td style="width:50%;vertical-align:top;">'
+        + '<p style="font-weight:700;margin-bottom:8px;">(수탁자)</p>'
+        + '<p>사업자등록번호: 407-11-65078</p>'
+        + '<p>업체명: 모먼트웍스</p>'
+        + '<p>대표자: 김현관</p>'
+        + '<p>대표번호: 010-9952-9829</p>'
+        + '</td>'
+        + '</tr>'
+        + '</table>'
+        + '</div>';
 
-        + '<p style="text-align:center;margin:20px 0 24px 0;">계약일자: ' + v('f-contract-date') + '</p>'
-
-        + '<div style="display:flex;gap:20px;">'
-        + '<div style="width:340px;">'
-        + '<p style="font-weight:700;color:#6E2430;margin:0 0 10px 0;">(위탁자)</p>'
-        + '<p style="margin:0 0 6px 0;">계약자: ' + v('f-signer-name') + '</p>'
-        + '<p style="margin:0 0 6px 0;">연락처: ' + v('f-signer-phone') + '</p>'
-        + '<p style="margin:0 0 6px 0;">서명: ' + agreeText + '</p>'
-        + '<p style="margin:10px 0 0 0;">(신랑) ' + v('f-groom-name') + '&nbsp;&nbsp;&nbsp;(신부) ' + v('f-bride-name') + '</p>'
-        + '</div>'
-        + '<div style="width:280px;display:flex;justify-content:space-between;align-items:flex-start;">'
-        + '<div>'
-        + '<p style="font-weight:700;margin:0 0 10px 0;">(수탁자)</p>'
-        + '<p style="margin:0 0 6px 0;">사업자등록번호: 407-11-65078</p>'
-        + '<p style="margin:0 0 6px 0;">업체명: 모먼트웍스</p>'
-        + '<p style="margin:0 0 6px 0;">대표자: 김현관</p>'
-        + '<p style="margin:0 0 6px 0;">대표번호: 010-9952-9829</p>'
-        + '</div>'
-        + (sealSrc ? '<img src="' + sealSrc + '" style="width:64px;height:64px;object-fit:contain;margin-left:10px;">' : '')
-        + '</div>'
-        + '</div>'
-
-        + pageClose;
-
-      return [page1, page2, page3];
-    }
-
-    // 3개 페이지 HTML을 화면 밖 printArea에 각각 개별 컨테이너로 렌더링(캡처용)
-    function renderPrintablePages(){
-      var pagesHtml = buildPrintablePages();
       var container = document.getElementById('printArea');
-      container.innerHTML = '';
-      var pageEls = [];
-      pagesHtml.forEach(function(html, idx){
-        var pageEl = document.createElement('div');
-        pageEl.id = 'printPage' + idx;
-        pageEl.innerHTML = html;
-        container.appendChild(pageEl);
-        pageEls.push(pageEl);
-      });
-      return pageEls;
+      container.innerHTML = html;
+      return container;
     }
 
     function collectFormData(){
@@ -832,7 +783,6 @@
       return {
         secret: GAS_SHARED_SECRET,
         weddingDate: v('f-date'),
-        weddingTime: v('f-time'),
         venue: v('f-venue'),
         hall: v('f-hall'),
         side: v('f-side'),
@@ -840,53 +790,33 @@
         deposit: v('f-deposit'),
         balance: v('f-balance'),
         earlybird: document.getElementById('f-earlybird').checked,
-        partnerCode: v('f-partner-code'),
         signerName: v('f-signer-name'),
         signerPhone: v('f-signer-phone')
       };
     }
 
-    // "[모먼트웍스] 운영 설정서(예식일_예식시작시간)_계약자성함(예식장)" 형태의 공통 이름 생성
-    function buildContractName(){
-      var date = (document.getElementById('f-date').value || '').replace(/-/g,'');
-      var time = (document.getElementById('f-time').value || '').replace(/:/g,'');
-      var name = document.getElementById('f-signer-name').value.trim();
-      var venue = document.getElementById('f-venue').value.trim();
-      return '[모먼트웍스] 운영 설정서(' + date + '_' + time + ')_' + name + '(' + venue + ')';
-    }
-
-    // 1페이지(1~3) / 2페이지(4~8) / 3페이지(9~서명)를 각각 개별 캡처하여
-    // 섹션이 페이지 중간에서 잘리지 않고 정확히 3페이지로 구성되도록 PDF 생성
+    // HTML 페이지 내용을 그대로 캡처해서 jsPDF로 PDF를 만들고, base64 문자열로 반환
     async function generateContractPdfBase64(){
-      var pageEls = renderPrintablePages();
+      var printEl = buildPrintableDocument();
+      var canvas = await html2canvas(printEl, { scale: 2, backgroundColor: '#ffffff' });
 
       var jsPDF = window.jspdf.jsPDF;
       var pdf = new jsPDF('p', 'mm', 'a4');
-      var margin = 12; // 상하좌우 여백(mm)
       var pageWidth = pdf.internal.pageSize.getWidth();
       var pageHeight = pdf.internal.pageSize.getHeight();
-      var contentWidth = pageWidth - margin * 2;
-      var contentHeight = pageHeight - margin * 2;
+      var imgWidth = pageWidth;
+      var imgHeight = canvas.height * imgWidth / canvas.width;
+      var heightLeft = imgHeight;
+      var position = 0;
+      var imgData = canvas.toDataURL('image/png');
 
-      for(var i = 0; i < pageEls.length; i++){
-        var canvas = await html2canvas(pageEls[i], { scale: 1.5, backgroundColor: '#ffffff' });
-        // PNG(무손실) 대신 JPEG(압축)로 저장하여 PDF 용량을 대폭 줄임 (텍스트 위주 문서라 화질 저하는 거의 체감되지 않음)
-        var imgData = canvas.toDataURL('image/jpeg', 0.85);
-
-        var imgWidth = contentWidth;
-        var imgHeight = canvas.height * imgWidth / canvas.width;
-
-        // 해당 페이지 내용이 A4 한 페이지 높이보다 길면, 비율을 유지한 채 한 페이지 안에 들어오도록 축소
-        if(imgHeight > contentHeight){
-          var scaleRatio = contentHeight / imgHeight;
-          imgHeight = contentHeight;
-          imgWidth = imgWidth * scaleRatio;
-        }
-
-        if(i > 0){ pdf.addPage(); }
-
-        var xOffset = margin + (contentWidth - imgWidth) / 2;
-        pdf.addImage(imgData, 'JPEG', xOffset, margin, imgWidth, imgHeight);
+      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+      while(heightLeft > 0){
+        position = heightLeft - imgHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
       }
 
       // data:application/pdf;base64,XXXX 에서 base64 부분만 추출
@@ -918,7 +848,42 @@
       btn.textContent = 'PDF 생성 중...';
       btn.disabled = true;
 
-      var fileName = buildContractName() + '.pdf';
+     // ==============================
+     // PDF 파일명 / 이메일 제목 생성
+     // 형식 : [모먼트웍스] 축의대 대행 서비스 계약서(20261031_1130)_홍길동.pdf
+     // ==============================
+
+     // 예식일
+      const weddingDate =
+      document.getElementById("f-date").value;
+
+      // 예식시간
+      const weddingTime =
+      document.getElementById("f-time").value;
+
+      // 계약자명
+      const signerName =
+      document.getElementById("f-signer-name").value.trim();
+
+      // 날짜에서 - 제거
+      const safeDate =
+      (weddingDate || "날짜미입력")
+      .replace(/-/g, "");
+
+      // 시간에서 : 제거
+      const safeTime =
+      (weddingTime || "시간미입력")
+      .replace(/:/g, "");
+
+      // 이름 공백 제거
+      const safeName =
+      (signerName || "계약자")
+      .replace(/\s+/g, "");
+
+      // 문서 제목(파일명/이메일 제목 공통) 및 최종 파일명
+      const docTitle =
+      `[모먼트웍스] 축의대 대행 서비스 계약서(${safeDate}_${safeTime})_${safeName}`;
+      const fileName = `${docTitle}.pdf`;
 
       try{
         var pdfBase64 = await generateContractPdfBase64();
@@ -928,7 +893,7 @@
 
         // 백엔드 URL이 아직 설정되지 않았다면, 예전 방식(PDF 다운로드 + 이메일 초안)으로 대체 동작
         if(!GAS_WEB_APP_URL || GAS_WEB_APP_URL.indexOf('PASTE_YOUR') === 0){
-          momentWorksFallbackDownload(pdfBase64, fileName, name, phone);
+          momentWorksFallbackDownload(pdfBase64, fileName, docTitle, name, phone);
           return;
         }
 
@@ -936,6 +901,7 @@
 
         var payload = collectFormData();
         payload.fileName = fileName;
+        payload.emailSubject = docTitle;
         payload.pdfBase64 = pdfBase64;
 
         var res = await fetch(GAS_WEB_APP_URL, {
@@ -973,13 +939,13 @@
     }
 
     // ====== 백업용: 백엔드 미설정 시에만 동작 (PDF 다운로드 + 이메일 초안 수동 첨부) ======
-    function momentWorksFallbackDownload(pdfBase64, fileName, name, phone){
+    function momentWorksFallbackDownload(pdfBase64, fileName, docTitle, name, phone){
       var link = document.createElement('a');
       link.href = 'data:application/pdf;base64,' + pdfBase64;
       link.download = fileName;
       link.click();
 
-      var subject = buildContractName();
+      var subject = docTitle;
       var mailBody = '방금 다운로드된 계약서 PDF 파일(' + fileName + ')을 이 메일에 첨부하여 전송해 주세요.\n\n계약자: ' + name + '\n연락처: ' + phone;
       var mailUrl = 'mailto:moment_works@naver.com,bn_company@naver.com?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(mailBody);
 
