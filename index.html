@@ -167,7 +167,6 @@
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
@@ -221,8 +220,24 @@
       </div>
 
       <div class="field">
+        <label for="f-client-phone">연락처</label>
+        <input type="tel" id="f-client-phone" placeholder="010-0000-0000">
+      </div>
+
+      <div class="field">
         <label for="f-consult-date">상담일</label>
         <input type="date" id="f-consult-date">
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="f-groom-name-src">(신랑) 성함</label>
+          <input type="text" id="f-groom-name-src" placeholder="성함">
+        </div>
+        <div class="field">
+          <label for="f-bride-name-src">(신부) 성함</label>
+          <input type="text" id="f-bride-name-src" placeholder="성함">
+        </div>
       </div>
 
       <div class="field-row">
@@ -390,22 +405,22 @@
       <p style="font-size:13px;font-weight:700;color:var(--wine);margin:16px 0 10px;">(위탁자)</p>
 
       <div class="field">
-        <label for="f-signer-name">계약자 성함</label>
-        <input type="text" id="f-signer-name" placeholder="성함을 입력해 주세요" required>
+        <label for="f-signer-name">계약자 성함 <span style="color:var(--muted);font-weight:400;">※ 계약 정보에서 자동 입력</span></label>
+        <input type="text" id="f-signer-name" placeholder="자동으로 입력됩니다." readonly required>
       </div>
       <div class="field">
-        <label for="f-signer-phone">연락처</label>
-        <input type="tel" id="f-signer-phone" placeholder="010-0000-0000" required>
+        <label for="f-signer-phone">연락처 <span style="color:var(--muted);font-weight:400;">※ 계약 정보에서 자동 입력</span></label>
+        <input type="tel" id="f-signer-phone" placeholder="자동으로 입력됩니다." readonly required>
       </div>
 
       <div class="field-row">
         <div class="field">
           <label for="f-groom-name">(신랑)</label>
-          <input type="text" id="f-groom-name" placeholder="성함">
+          <input type="text" id="f-groom-name" placeholder="자동으로 입력됩니다." readonly>
         </div>
         <div class="field">
           <label for="f-bride-name">(신부)</label>
-          <input type="text" id="f-bride-name" placeholder="성함">
+          <input type="text" id="f-bride-name" placeholder="자동으로 입력됩니다." readonly>
         </div>
       </div>
 
@@ -445,59 +460,6 @@
     const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxJ-SXRWCwIjypuY5CNRNPBUSFfLIhCNQwqXzxv4NxUfFuP8kGzZY7nZa-7nOhJyhsi/exec';
     const GAS_SHARED_SECRET = '1121';
 
-    // ====== 예약일정관리 페이지(Supabase) 자동 연동 설정 ======
-    // 예약일정관리 페이지(index.html)와 반드시 같은 프로젝트 URL / anon key를 사용해야 같은 캘린더에 반영됩니다.
-    const SCHEDULE_SUPABASE_URL = 'https://jpqisppqbsqdlyjvkbic.supabase.co';
-    const SCHEDULE_SUPABASE_ANON_KEY = 'sb_publishable_J62N4rw8GVAzjF8rCv8ezA_CHbPh6Je';
-    const scheduleDb = window.supabase.createClient(SCHEDULE_SUPABASE_URL, SCHEDULE_SUPABASE_ANON_KEY);
-
-    // 계약 정보를 예약일정관리 캘린더의 schedules 테이블에 자동으로 반영(확정마감 처리)
-    async function syncToScheduleBoard(){
-      try{
-        const date = document.getElementById('f-date').value;
-        if(!date) return; // 예식일이 없으면 동기화 대상 아님
-
-        const timeVal = document.getElementById('f-time').value; // 'HH:MM'
-        const hour = timeVal ? parseInt(timeVal.split(':')[0], 10) : 12;
-        const session = (hour < 12) ? 'AM' : 'PM'; // 1차/2차
-
-        const venue = (document.getElementById('f-venue') ? document.getElementById('f-venue').value : '').trim();
-        const hall = (document.getElementById('f-hall') ? document.getElementById('f-hall').value : '').trim();
-        const region = [venue, hall].filter(Boolean).join(' ');
-
-        const groom = (document.getElementById('f-groom-name') ? document.getElementById('f-groom-name').value : '').trim();
-        const bride = (document.getElementById('f-bride-name') ? document.getElementById('f-bride-name').value : '').trim();
-        const signerName = document.getElementById('f-signer-name').value.trim();
-        const memo = (groom || bride) ? [groom, bride].filter(Boolean).join(' · ') : signerName;
-
-        const { data: existing, error: findErr } = await scheduleDb
-          .from('schedules')
-          .select('id')
-          .eq('date', date)
-          .eq('session', session)
-          .eq('status', 'confirmed')
-          .maybeSingle();
-
-        if(findErr) throw findErr;
-
-        if(existing){
-          const { error: updErr } = await scheduleDb
-            .from('schedules')
-            .update({ region, venue, memo })
-            .eq('id', existing.id);
-          if(updErr) throw updErr;
-        } else {
-          const { error: insErr } = await scheduleDb
-            .from('schedules')
-            .insert({ date, session, region, venue, status: 'confirmed', memo });
-          if(insErr) throw insErr;
-        }
-      } catch(e){
-        // 예약일정 보드 동기화는 계약서 접수 자체를 막지 않도록 오류는 콘솔에만 남깁니다.
-        console.error('예약일정 보드 자동 반영 실패:', e);
-      }
-    }
-
     function pad(n){ return n.toString().padStart(2,'0'); }
     function fmtDate(d){ return d.getFullYear()+'.'+pad(d.getMonth()+1)+'.'+pad(d.getDate()); }
 
@@ -507,6 +469,7 @@
       var iso = today.getFullYear()+'-'+pad(today.getMonth()+1)+'-'+pad(today.getDate());
       document.getElementById('f-consult-date').value = iso;
       document.getElementById('f-contract-date').value = iso;
+      document.getElementById('f-deposit-date').value = iso;
     })();
 
     // 예식시간: 시(0~23) / 분(10분 단위) 옵션 채우기
@@ -605,7 +568,7 @@
         }
       }
 
-      var phoneDigits = (document.getElementById('f-signer-phone').value || '').replace(/[^0-9]/g, '');
+      var phoneDigits = (document.getElementById('f-client-phone').value || '').replace(/[^0-9]/g, '');
       var last2 = phoneDigits.slice(-2);
 
       if(!initial || dateDigits.length !== 6 || last2.length !== 2){
@@ -617,12 +580,25 @@
     }
 
     // 짝꿍코드 구성에 영향을 주는 입력값이 바뀔 때마다 재생성
-    ['f-venue','f-hall','f-client','f-consult-date','f-groom-guests','f-bride-guests','f-contract-date','f-signer-phone'].forEach(function(id){
+    ['f-venue','f-hall','f-client','f-consult-date','f-groom-guests','f-bride-guests','f-contract-date','f-client-phone'].forEach(function(id){
       var el = document.getElementById(id);
       el.addEventListener('input', momentWorksGeneratePartnerCode);
       el.addEventListener('change', momentWorksGeneratePartnerCode);
     });
     document.getElementById('f-side').addEventListener('change', momentWorksGeneratePartnerCode);
+
+    // "계약 정보"에 입력된 계약자/연락처/신랑/신부 성함을 "계약일자 및 서명" 영역에 자동 반영
+    function momentWorksSyncSignatureFields(){
+      document.getElementById('f-signer-name').value = document.getElementById('f-client').value;
+      document.getElementById('f-signer-phone').value = document.getElementById('f-client-phone').value;
+      document.getElementById('f-groom-name').value = document.getElementById('f-groom-name-src').value;
+      document.getElementById('f-bride-name').value = document.getElementById('f-bride-name-src').value;
+    }
+    ['f-client','f-client-phone','f-groom-name-src','f-bride-name-src'].forEach(function(id){
+      var el = document.getElementById(id);
+      el.addEventListener('input', momentWorksSyncSignatureFields);
+      el.addEventListener('change', momentWorksSyncSignatureFields);
+    });
 
     var SIDE_INFO = {
       '한측':  { amount: 315000, guests: '250명' },
@@ -887,9 +863,6 @@
 
       try{
         var pdfBase64 = await generateContractPdfBase64();
-
-        // 계약 접수가 확정된 시점이므로, 예약일정관리 캘린더에도 바로 반영합니다.
-        await syncToScheduleBoard();
 
         // 백엔드 URL이 아직 설정되지 않았다면, 예전 방식(PDF 다운로드 + 이메일 초안)으로 대체 동작
         if(!GAS_WEB_APP_URL || GAS_WEB_APP_URL.indexOf('PASTE_YOUR') === 0){
