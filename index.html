@@ -167,6 +167,7 @@
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
@@ -469,6 +470,59 @@
     // (Code.gs의 SHARED_SECRET과 반드시 동일한 값으로 맞춰주세요.)
     const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxJ-SXRWCwIjypuY5CNRNPBUSFfLIhCNQwqXzxv4NxUfFuP8kGzZY7nZa-7nOhJyhsi/exec';
     const GAS_SHARED_SECRET = '1121';
+
+    // ====== 예약일정관리 페이지(Supabase) 자동 연동 설정 ======
+    // 예약일정관리 페이지(index.html)와 반드시 같은 프로젝트 URL / anon key를 사용해야 같은 캘린더에 반영됩니다.
+    const SCHEDULE_SUPABASE_URL = 'https://jpqisppqbsqdlyjvkbic.supabase.co';
+    const SCHEDULE_SUPABASE_ANON_KEY = 'sb_publishable_J62N4rw8GVAzjF8rCv8ezA_CHbPh6Je';
+    const scheduleDb = window.supabase.createClient(SCHEDULE_SUPABASE_URL, SCHEDULE_SUPABASE_ANON_KEY);
+
+    // 계약 정보를 예약일정관리 캘린더의 schedules 테이블에 자동으로 반영(확정마감 처리)
+    async function syncToScheduleBoard(){
+      try{
+        const date = document.getElementById('f-date').value;
+        if(!date) return; // 예식일이 없으면 동기화 대상 아님
+
+        const timeVal = document.getElementById('f-time').value; // 'HH:MM'
+        const hour = timeVal ? parseInt(timeVal.split(':')[0], 10) : 12;
+        const session = (hour < 12) ? 'AM' : 'PM'; // 1차/2차
+
+        const venue = (document.getElementById('f-venue') ? document.getElementById('f-venue').value : '').trim();
+        const hall = (document.getElementById('f-hall') ? document.getElementById('f-hall').value : '').trim();
+        const region = [venue, hall].filter(Boolean).join(' ');
+
+        const groom = (document.getElementById('f-groom-name') ? document.getElementById('f-groom-name').value : '').trim();
+        const bride = (document.getElementById('f-bride-name') ? document.getElementById('f-bride-name').value : '').trim();
+        const signerName = document.getElementById('f-signer-name').value.trim();
+        const memo = (groom || bride) ? [groom, bride].filter(Boolean).join(' · ') : signerName;
+
+        const { data: existing, error: findErr } = await scheduleDb
+          .from('schedules')
+          .select('id')
+          .eq('date', date)
+          .eq('session', session)
+          .eq('status', 'confirmed')
+          .maybeSingle();
+
+        if(findErr) throw findErr;
+
+        if(existing){
+          const { error: updErr } = await scheduleDb
+            .from('schedules')
+            .update({ region, venue, memo })
+            .eq('id', existing.id);
+          if(updErr) throw updErr;
+        } else {
+          const { error: insErr } = await scheduleDb
+            .from('schedules')
+            .insert({ date, session, region, venue, status: 'confirmed', memo });
+          if(insErr) throw insErr;
+        }
+      } catch(e){
+        // 예약일정 보드 동기화는 계약서 접수 자체를 막지 않도록 오류는 콘솔에만 남깁니다.
+        console.error('예약일정 보드 자동 반영 실패:', e);
+      }
+    }
 
     function pad(n){ return n.toString().padStart(2,'0'); }
     function fmtDate(d){ return d.getFullYear()+'.'+pad(d.getMonth()+1)+'.'+pad(d.getDate()); }
@@ -801,24 +855,27 @@
     // HTML 페이지 내용을 그대로 캡처해서 jsPDF로 PDF를 만들고, base64 문자열로 반환
     async function generateContractPdfBase64(){
       var printEl = buildPrintableDocument();
-      var canvas = await html2canvas(printEl, { scale: 2, backgroundColor: '#ffffff' });
+      // scale을 낮춰 캡처 해상도를 필요한 수준으로 제한 (파일 용량 절감)
+      var canvas = await html2canvas(printEl, { scale: 1.5, backgroundColor: '#ffffff' });
 
       var jsPDF = window.jspdf.jsPDF;
-      var pdf = new jsPDF('p', 'mm', 'a4');
+      // compress:true → PDF 내부 스트림 압축 적용
+      var pdf = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4', compress: true });
       var pageWidth = pdf.internal.pageSize.getWidth();
       var pageHeight = pdf.internal.pageSize.getHeight();
       var imgWidth = pageWidth;
       var imgHeight = canvas.height * imgWidth / canvas.width;
       var heightLeft = imgHeight;
       var position = 0;
-      var imgData = canvas.toDataURL('image/png');
+      // PNG 대신 JPEG(품질 0.82)로 압축하여 이미지 용량을 크게 절감
+      var imgData = canvas.toDataURL('image/jpeg', 0.82);
 
-      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+      pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight, undefined, 'FAST');
       heightLeft -= pageHeight;
       while(heightLeft > 0){
         position = heightLeft - imgHeight;
         pdf.addPage();
-        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+        pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight, undefined, 'FAST');
         heightLeft -= pageHeight;
       }
 
@@ -890,6 +947,9 @@
 
       try{
         var pdfBase64 = await generateContractPdfBase64();
+
+        // 계약 접수가 확정된 시점이므로, 예약일정관리 캘린더에도 바로 반영합니다.
+        await syncToScheduleBoard();
 
         // 백엔드 URL이 아직 설정되지 않았다면, 예전 방식(PDF 다운로드 + 이메일 초안)으로 대체 동작
         if(!GAS_WEB_APP_URL || GAS_WEB_APP_URL.indexOf('PASTE_YOUR') === 0){
