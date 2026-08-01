@@ -296,6 +296,16 @@
       </div>
 
       <div class="field">
+        <label for="f-referral-code">짝꿍코드 <span style="color:var(--muted);font-weight:400;">(추천인 코드 / 선택항목)</span></label>
+        <input type="text" id="f-referral-code" placeholder="짝꿍코드가 있다면 입력해 주세요 (10,000원 할인)" oninput="momentWorksCalcBalance()">
+      </div>
+
+      <div class="field">
+        <label for="f-special-discount">특별 할인 금액 (원) <span style="color:var(--muted);font-weight:400;">※ 얼리버드 + 짝꿍코드 할인 합계</span></label>
+        <input type="text" id="f-special-discount" placeholder="원" readonly>
+      </div>
+
+      <div class="field">
         <label for="f-total">계약금액 (원) <span style="color:var(--muted);font-weight:400;">※ 기준금액 기준 자동 계산</span></label>
         <input type="text" id="f-total" placeholder="한측/양측/통합 선택 시 자동 입력" readonly>
       </div>
@@ -472,6 +482,9 @@
       document.getElementById('f-deposit-date').value = iso;
     })();
 
+    // 특별 할인 금액 초기값 표시
+    momentWorksCalcSpecialDiscount();
+
     // 예식시간: 시(0~23) / 분(10분 단위) 옵션 채우기
     (function(){
       var hourSel = document.getElementById('f-time-hour');
@@ -630,8 +643,16 @@
     function momentWorksCalcBalance(){
       var total = parseInt(document.getElementById('f-total').value) || 0;
       var deposit = parseInt(document.getElementById('f-deposit').value) || 0;
-      var balance = total - deposit;
+      var referralDiscount = document.getElementById('f-referral-code').value.trim() ? 10000 : 0;
+      var balance = total - deposit - referralDiscount;
       document.getElementById('f-balance').value = total > 0 ? (balance > 0 ? balance : 0) : '';
+      momentWorksCalcSpecialDiscount();
+    }
+
+    function momentWorksCalcSpecialDiscount(){
+      var earlybirdDiscount = document.getElementById('f-earlybird').checked ? 20000 : 0;
+      var referralDiscount = document.getElementById('f-referral-code').value.trim() ? 10000 : 0;
+      document.getElementById('f-special-discount').value = earlybirdDiscount + referralDiscount;
     }
 
     function buildContractSummary(){
@@ -652,6 +673,8 @@
         '기준금액: ' + v('f-base-amount') + '원',
         '',
         '▷ 계약금 및 결제',
+        '짝꿍코드(추천인): ' + v('f-referral-code'),
+        '특별 할인 금액: ' + v('f-special-discount') + '원',
         '계약금액: ' + v('f-total') + '원',
         '계약금: ' + v('f-deposit') + '원 (입금일: ' + v('f-deposit-date') + ')',
         '잔금: ' + v('f-balance') + '원',
@@ -693,6 +716,8 @@
         + '<h3 style="font-size:14px;border-bottom:2px solid #6E2430;padding-bottom:4px;margin-bottom:8px;">3. 계약금 및 결제</h3>'
         + '<table style="width:100%;border-collapse:collapse;margin-bottom:6px;" border="1" cellpadding="6">'
         + '<tr><td style="width:30%;background:#F7F4EE;">얼리버드 할인 적용</td><td>' + (document.getElementById('f-earlybird').checked ? '적용 (20,000원 할인)' : '미적용') + '</td></tr>'
+        + '<tr><td style="background:#F7F4EE;">짝꿍코드(추천인)</td><td>' + v('f-referral-code') + '</td></tr>'
+        + '<tr><td style="background:#F7F4EE;">특별 할인 금액</td><td>' + v('f-special-discount') + '원</td></tr>'
         + '<tr><td style="background:#F7F4EE;">계약금액</td><td>' + v('f-total') + '원</td></tr>'
         + '<tr><td style="background:#F7F4EE;">계약금 / 입금일</td><td>' + v('f-deposit') + '원 / ' + v('f-deposit-date') + '</td></tr>'
         + '<tr><td style="background:#F7F4EE;">잔금 (예식일 포함 2일 이내 정산)</td><td>' + v('f-balance') + '원</td></tr>'
@@ -766,6 +791,8 @@
         deposit: v('f-deposit'),
         balance: v('f-balance'),
         earlybird: document.getElementById('f-earlybird').checked,
+        referralCode: v('f-referral-code'),
+        specialDiscount: v('f-special-discount'),
         signerName: v('f-signer-name'),
         signerPhone: v('f-signer-phone')
       };
