@@ -146,47 +146,75 @@
   .footer-mark{text-align:center;margin-top:30px;font-size:11px;color:var(--muted);}
 
   /* ===== PDF REPORT (premium) STYLES — used only inside #printArea when generating the PDF ===== */
-  .rpt-wrap{font-family:'Noto Sans KR',sans-serif;color:#2A241D;width:700px;padding:46px 48px;background:#fff;font-size:12.5px;line-height:1.85;}
-  .rpt-head{text-align:center;margin-bottom:28px;padding-bottom:20px;border-bottom:2px solid #6E2430;}
-  .rpt-eyebrow{font-family:'Noto Serif KR',serif;font-size:11px;letter-spacing:5px;color:#6E2430;margin-bottom:10px;}
-  .rpt-title{font-family:'Noto Serif KR',serif;font-size:22px;font-weight:700;color:#2A241D;margin-bottom:8px;letter-spacing:0.02em;}
-  .rpt-sub{font-size:11px;color:#8A8074;letter-spacing:1.5px;}
-  .rpt-meta{text-align:right;font-size:10.5px;color:#8A8074;margin-bottom:6px;}
-  .rpt-h3{font-family:'Noto Serif KR',serif;font-size:14.5px;font-weight:700;color:#2A241D;border-bottom:1.5px solid #D8CFBA;padding-bottom:7px;margin:28px 0 12px;display:flex;align-items:center;gap:9px;}
-  .rpt-h3:first-of-type{margin-top:4px;}
-  .rpt-num{display:inline-flex;align-items:center;justify-content:center;width:21px;height:21px;min-width:21px;border-radius:50%;background:#6E2430;color:#fff;font-size:11px;font-family:'Noto Sans KR',sans-serif;font-weight:700;}
-  .rpt-table{width:100%;border-collapse:collapse;margin-top:4px;}
-  .rpt-table td, .rpt-table th{border:1px solid #E3DDCF;padding:10px 12px;font-size:12px;vertical-align:middle;}
+  /* 2페이지 안에 깔끔히 들어가도록 촘촘하게 압축한 버전 */
+  .rpt-wrap{font-family:'Noto Sans KR',sans-serif;color:#2A241D;width:760px;padding:32px 36px;background:#fff;font-size:10.8px;line-height:1.55;}
+  .rpt-head{text-align:center;margin-bottom:14px;padding-bottom:10px;border-bottom:2px solid #6E2430;}
+  .rpt-eyebrow{font-family:'Noto Serif KR',serif;font-size:10px;letter-spacing:4px;color:#6E2430;margin-bottom:4px;}
+  .rpt-title{font-family:'Noto Serif KR',serif;font-size:18px;font-weight:700;color:#2A241D;margin-bottom:4px;letter-spacing:0.02em;}
+  .rpt-sub{font-size:9.5px;color:#8A8074;letter-spacing:1.2px;}
+  .rpt-meta{text-align:right;font-size:9.5px;color:#8A8074;margin-bottom:2px;}
+  .rpt-h3{font-family:'Noto Serif KR',serif;font-size:12.5px;font-weight:700;color:#2A241D;border-bottom:1.5px solid #D8CFBA;padding-bottom:4px;margin:14px 0 6px;display:flex;align-items:center;gap:7px;}
+  .rpt-h3:first-of-type{margin-top:2px;}
+  .rpt-num{display:inline-flex;align-items:center;justify-content:center;width:17px;height:17px;min-width:17px;border-radius:50%;background:#6E2430;color:#fff;font-size:9.5px;font-family:'Noto Sans KR',sans-serif;font-weight:700;}
+  .rpt-table{width:100%;border-collapse:collapse;margin-top:3px;}
+  .rpt-table td, .rpt-table th{border:1px solid #E3DDCF;padding:6px 8px;font-size:10.5px;vertical-align:middle;}
   .rpt-table td.rpt-label{background:#F7F4EE;color:#6E2430;font-weight:600;width:24%;}
   .rpt-table th{background:#F7F4EE;color:#6E2430;font-weight:700;text-align:center;}
-  .rpt-ul{margin:6px 0 6px 20px;padding:0;}
-  .rpt-ul li{margin-bottom:6px;}
-  .rpt-p{margin:0 0 14px;}
-  .rpt-note{font-size:11px;color:#8A8074;margin:10px 0 4px;line-height:2;}
-  .rpt-sign-table{width:100%;border-collapse:collapse;margin-top:8px;}
-  .rpt-sign-table td{vertical-align:top;padding:16px 14px 6px 0;font-size:12px;line-height:2;}
-  .rpt-sign-label{font-family:'Noto Serif KR',serif;font-weight:700;color:#6E2430;margin-bottom:10px;font-size:13.5px;}
-  .rpt-seal-inline{width:44px;height:44px;object-fit:contain;flex-shrink:0;}
-  .rpt-footer{text-align:center;margin-top:30px;padding-top:16px;border-top:1px solid #EEE8DA;font-size:10.5px;color:#B9AF9C;letter-spacing:2px;}
+  .rpt-ul{margin:3px 0 3px 18px;padding:0;}
+  .rpt-ul li{margin-bottom:3px;}
+  .rpt-p{margin:0 0 8px;}
+  .rpt-note{font-size:9.5px;color:#8A8074;margin:5px 0 2px;line-height:1.5;}
+  .rpt-sign-table{width:100%;border-collapse:collapse;margin-top:6px;}
+  .rpt-sign-table td{vertical-align:top;padding:8px 12px 4px 0;font-size:10.5px;line-height:1.6;}
+  .rpt-sign-label{font-family:'Noto Serif KR',serif;font-weight:700;color:#6E2430;margin-bottom:5px;font-size:12px;}
+  .rpt-seal-inline{width:38px;height:38px;object-fit:contain;flex-shrink:0;}
+  .rpt-footer{text-align:center;margin-top:14px;padding-top:8px;border-top:1px solid #EEE8DA;font-size:9.5px;color:#B9AF9C;letter-spacing:1.5px;}
 
   /* ===== MOBILE REFINEMENTS ===== */
-  @media(max-width:400px){
-    .top{padding:30px 16px 24px;}
+  @media(max-width:600px){
+    .top{padding:28px 16px 22px;}
     .top h1{font-size:18px;}
     .wrap{padding:0 12px;}
-    .card{padding:20px 15px;margin-top:14px;}
-    .sec-title{font-size:15.5px;}
+    .card{padding:18px 14px;margin-top:12px;border-radius:8px;}
+    .sec-title{font-size:15px;margin-bottom:12px;}
+    .sec-num{width:24px;height:24px;font-size:12px;margin-right:7px;}
+
+    /* 반응형 배열: 2열 그리드는 좁은 화면에서 1열로 */
     .field-row{grid-template-columns:1fr;gap:0;}
-    .field-row .field{margin-bottom:14px;}
-    .field-row .field:last-child{margin-bottom:14px;}
-    .field input, .field select, .field textarea{font-size:15px;padding:12px;}
-    table.refund{font-size:11.5px;}
-    table.refund th, table.refund td{padding:7px 5px;}
-    .seal-block{flex-direction:column;align-items:flex-start;gap:14px;}
+    .field-row .field{margin-bottom:16px;}
+    .field-row .field:last-child{margin-bottom:16px;}
+    .field{margin-bottom:16px;}
+    .field label{font-size:12px;}
+
+    /* iOS 자동 확대 방지: 포커스 시 확대가 시작되는 기준이 16px 미만이라 16px로 고정 */
+    .field input, .field select, .field textarea{
+      font-size:16px !important; padding:13px 12px; min-height:46px;
+    }
+
+    /* 터치 친화적 UI: 버튼 · 체크박스 탭 영역 확대 (최소 44px) */
+    .btn-submit{padding:16px; font-size:16px; min-height:50px;}
+    .btn-copy{padding:13px; min-height:46px;}
+    .agree{padding:14px; gap:12px; cursor:pointer;}
+    .agree input{width:22px; height:22px; min-width:22px;}
+    .agree label{font-size:12.5px; line-height:1.7;}
+
+    /* 카드 뷰 시각화: 취소/환불 표를 좁은 화면에서 카드 리스트로 전환 */
+    table.refund thead{display:none;}
+    table.refund, table.refund tbody, table.refund tr, table.refund td{display:block; width:100%;}
+    table.refund{margin-top:12px;}
+    table.refund tr{
+      border:1px solid #E3DDCF; border-radius:8px; margin-bottom:10px;
+      padding:12px 14px; background:#fff;
+    }
+    table.refund td{border:none; text-align:left; padding:3px 0;}
+    table.refund td::before{
+      content:attr(data-label); display:block; font-size:10.5px;
+      color:var(--wine); font-weight:700; margin-bottom:3px; letter-spacing:0.3px;
+    }
+    table.refund td[data-label="환불"]{font-size:14.5px; font-weight:700; color:var(--ink-text);}
+
+    .seal-block{flex-direction:column; align-items:flex-start; gap:14px;}
     .seal-img{align-self:center;}
-  }
-  @media(min-width:401px) and (max-width:480px){
-    .card{padding:22px 17px;}
   }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -833,7 +861,7 @@
         + '· 잔금은 할인 혜택 적용에 따라 변동(차감)될 수 있습니다.</p>'
 
         + '<div class="rpt-h3"><span class="rpt-num">4</span>계약의 성립</div>'
-        + '<p class="rpt-p">① 본 계약은 위탁자가 계약 내용을 확인한 후 계약금을 납부한 시점에 성립한 것으로 봅니다.<br><br>'
+        + '<p class="rpt-p">① 본 계약은 위탁자가 계약 내용을 확인한 후 계약금을 납부한 시점에 성립한 것으로 봅니다.<br>'
         + '② 위탁자가 계약금을 납부한 경우, 본 계약의 모든 내용을 충분히 확인하고 이에 동의한 것으로 봅니다.<br>'
         + '또한 계약금의 납부는 계약 내용 또는 날인에 갈음하는 의사표시로 보며, 별도의 서명 또는 날인이 없더라도 본 계약은 유효하게 성립하고 그 효력을 가집니다.</p>'
 
@@ -847,20 +875,20 @@
 
         + '<div class="rpt-h3"><span class="rpt-num">6</span>수탁자의 귀책사유에 따른 계약 해지 및 손해배상</div>'
         + '<p class="rpt-p">① 수탁자의 귀책사유로 계약을 일방적으로 해지하거나 정당한 사유 없이 계약상 서비스를 제공하지 못한 경우,<br>'
-        + '수탁자는 위탁자에게 기납부된 계약금을 전액 환불하고, 추가로 계약금 상당액을 보상금으로 지급합니다.<br><br>'
+        + '수탁자는 위탁자에게 기납부된 계약금을 전액 환불하고, 추가로 계약금 상당액을 보상금으로 지급합니다.<br>'
         + '단, 천재지변, 전쟁, 정부의 명령 또는 조치, 감염병 확산에 따른 제한, 교통·통신의 마비 등 수탁자가 합리적으로<br>'
         + '예측하거나 통제할 수 없는 불가항력적인 사유로 서비스를 제공하지 못한 경우에는 본 조를 적용하지 않습니다.</p>'
 
         + '<div class="rpt-h3"><span class="rpt-num">7</span>책임 및 면책</div>'
-        + '<p class="rpt-p">① 회사는 계약된 범위 내에서 선량한 관리자의 주의의무를 다하여 서비스를 제공합니다.<br><br>'
-        + '② 축의금은 기록 후 대리인(사전협의)에게 인계하며, 인계확인서 서명완료 시 관리 책임은 고객에게 이전됩니다.<br><br>'
+        + '<p class="rpt-p">① 회사는 계약된 범위 내에서 선량한 관리자의 주의의무를 다하여 서비스를 제공합니다.<br>'
+        + '② 축의금은 기록 후 대리인(사전협의)에게 인계하며, 인계확인서 서명완료 시 관리 책임은 고객에게 이전됩니다.<br>'
         + '③ 천재지변 등 불가항력 사유는 상호 협의합니다.</p>'
 
         + '<div class="rpt-h3"><span class="rpt-num">8</span>개인정보</div>'
         + '<p class="rpt-p">① 서비스 제공 목적 외에는 개인정보를 사용하지 않으며 관련 법령에 따라 관리합니다.</p>'
 
         + '<div class="rpt-h3"><span class="rpt-num">9</span>기타사항</div>'
-        + '<p class="rpt-p">① 세부 운영사항은 고객이 제출한 「Moment Works 축의대 대행 운영 설정서」에 따릅니다.<br><br>'
+        + '<p class="rpt-p">① 세부 운영사항은 고객이 제출한 「Moment Works 축의대 대행 운영 설정서」에 따릅니다.<br>'
         + '② 운영 설정서에 기재된 내용은 본 계약의 일부로 간주하며, 양 당사자는 이에 따라 서비스를 진행합니다.</p>'
 
         + '<div class="rpt-h3"><span class="rpt-num">10</span>짝꿍코드</div>'
@@ -935,8 +963,8 @@
       var pdf = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4', compress: true });
       var pageWidthMM = pdf.internal.pageSize.getWidth();
       var pageHeightMM = pdf.internal.pageSize.getHeight();
-      var marginTopMM = 8;
-      var marginBottomMM = 8;
+      var marginTopMM = 6;
+      var marginBottomMM = 6;
       var usableHeightMM = pageHeightMM - marginTopMM - marginBottomMM;
 
       var imgWidthMM = pageWidthMM;
