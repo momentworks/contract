@@ -825,16 +825,16 @@
         + '<div class="rpt-title">축의대 대행 서비스 계약서</div>'
         + '<div class="rpt-sub">WEDDING RECEPTION DESK SERVICE AGREEMENT</div>'
         + '</div>'
-        + '<div class="rpt-meta">문서 생성일: ' + todayLabel + '</div>'
+        + '<div class="rpt-meta">계약서 작성일: ' + todayLabel + '</div>'
 
         + '<div class="rpt-h3"><span class="rpt-num">1</span>계약 정보</div>'
         + '<table class="rpt-table">'
         + '<tr><td class="rpt-label">예식일</td><td>' + v('f-date') + '</td><td class="rpt-label">예식시간</td><td>' + v('f-time') + '</td></tr>'
         + '<tr><td class="rpt-label">지역</td><td>' + v('f-region') + '</td><td class="rpt-label">예식장</td><td>' + v('f-venue') + '</td></tr>'
         + '<tr><td class="rpt-label">홀명</td><td>' + v('f-hall') + '</td><td class="rpt-label">상담일</td><td>' + v('f-consult-date') + '</td></tr>'
-        + '<tr><td class="rpt-label">계약자</td><td colspan="3">' + v('f-client') + '</td></tr>'
+        + '<tr><td class="rpt-label">계약자</td><td>' + v('f-client') + '</td><td class="rpt-label">연락처</td><td>' + v('f-client-phone') + '</td></tr>'
         + '<tr><td class="rpt-label">신랑 하객인원</td><td>' + v('f-groom-guests') + '명</td><td class="rpt-label">신부 하객인원</td><td>' + v('f-bride-guests') + '명</td></tr>'
-        + '<tr><td class="rpt-label">한측/양측/통합</td><td>' + v('f-side') + '</td><td class="rpt-label">기준인원</td><td>' + v('f-base-guests') + '명</td></tr>'
+        + '<tr><td class="rpt-label">한측/양측/통합</td><td>' + v('f-side') + '</td><td class="rpt-label">기준인원</td><td>' + v('f-base-guests') + '</td></tr>'
         + '<tr><td class="rpt-label">기준금액</td><td colspan="3">' + vNum('f-base-amount') + '원</td></tr>'
         + '</table>'
 
@@ -865,7 +865,7 @@
         + '② 위탁자가 계약금을 납부한 경우, 본 계약의 모든 내용을 충분히 확인하고 이에 동의한 것으로 봅니다.<br>'
         + '또한 계약금의 납부는 계약 내용 또는 날인에 갈음하는 의사표시로 보며, 별도의 서명 또는 날인이 없더라도 본 계약은 유효하게 성립하고 그 효력을 가집니다.</p>'
 
-        + '<div class="rpt-h3"><span class="rpt-num">5</span>취소 및 환불 규정</div>'
+        + '<div class="rpt-h3" id="rpt-page2-start"><span class="rpt-num">5</span>취소 및 환불 규정</div>'
         + '<table class="rpt-table">'
         + '<tr><th>취소 시점</th><th>환불</th></tr>'
         + '<tr><td>' + document.getElementById('cut-60').innerText + '</td><td>계약금액의 100%</td></tr>'
@@ -979,6 +979,12 @@
       var totalHeightPx = canvas.height;
       breakPoints.push(totalHeightPx); // 문서 맨 끝도 분할 후보에 포함
 
+      // "5. 취소 및 환불 규정"부터는 무조건 2페이지에서 시작하도록 강제 분기점 지정
+      // (1~4영역은 1페이지, 5영역부터 서명란까지는 2페이지)
+      var forcedBreakEl = contentDiv.querySelector('#rpt-page2-start');
+      var forcedBreakPx = forcedBreakEl ? (forcedBreakEl.offsetTop * domToCanvasRatio) : null;
+      var forcedUsed = false;
+
       var pageStartPx = 0;
       var firstPage = true;
 
@@ -986,6 +992,11 @@
         var maxEndPx = pageStartPx + usableHeightPx;
         var pageEndPx = pageStartPx;
 
+        if(!forcedUsed && forcedBreakPx !== null && forcedBreakPx > pageStartPx + 1 && forcedBreakPx <= maxEndPx){
+          // 1~4영역이 한 페이지 안에 들어가는 경우, 정확히 이 지점에서 페이지를 나눈다.
+          pageEndPx = forcedBreakPx;
+          forcedUsed = true;
+        } else {
         for(var i = 0; i < breakPoints.length; i++){
           if(breakPoints[i] > pageStartPx + 1 && breakPoints[i] <= maxEndPx){
             pageEndPx = breakPoints[i];
@@ -994,6 +1005,7 @@
         // 블록 하나가 한 페이지보다 커서 안전 분할 지점을 못 찾은 경우, 어쩔 수 없이 페이지 높이만큼 강제로 자른다.
         if(pageEndPx <= pageStartPx){
           pageEndPx = Math.min(maxEndPx, totalHeightPx);
+        }
         }
 
         var sliceHeightPx = pageEndPx - pageStartPx;
