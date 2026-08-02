@@ -167,7 +167,7 @@
   .rpt-sign-table{width:100%;border-collapse:collapse;margin-top:6px;}
   .rpt-sign-table td{vertical-align:top;padding:8px 12px 4px 0;font-size:10.5px;line-height:1.6;}
   .rpt-sign-label{font-family:'Noto Serif KR',serif;font-weight:700;color:#6E2430;margin-bottom:5px;font-size:12px;}
-  .rpt-seal-inline{width:38px;height:38px;object-fit:contain;flex-shrink:0;}
+  .rpt-seal-inline{width:34px;height:34px;object-fit:contain;flex-shrink:0;}
   .rpt-footer{text-align:center;margin-top:14px;padding-top:8px;border-top:1px solid #EEE8DA;font-size:9.5px;color:#B9AF9C;letter-spacing:1.5px;}
 
   /* ===== MOBILE REFINEMENTS ===== */
@@ -915,16 +915,15 @@
         + '<div>계약자: ' + v('f-signer-name') + '</div>'
         + '<div>연락처: ' + v('f-signer-phone') + '</div>'
         + '<div>서명: ' + agreeText + '</div>'
-        + '<div style="margin-top:6px;">(신랑) ' + v('f-groom-name') + '&nbsp;&nbsp;&nbsp;(신부) ' + v('f-bride-name') + '</div>'
+        + '<div>(신랑) ' + v('f-groom-name') + '&nbsp;&nbsp;&nbsp;(신부) ' + v('f-bride-name') + '</div>'
         + '</td>'
         + '<td style="width:50%;">'
-        + '<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">'
-        + '<div class="rpt-sign-label" style="margin-bottom:0;">(수탁자)</div>'
-        + '<img class="rpt-seal-inline" src="data:image/png;base64,' + SEAL_IMG_B64 + '" alt="모먼트웍스 직인">'
-        + '</div>'
-        + '<div style="margin-top:8px;">사업자등록번호: 407-11-65078</div>'
+        + '<div class="rpt-sign-label">(수탁자)</div>'
+        + '<div>사업자등록번호: 407-11-65078</div>'
         + '<div>업체명: 모먼트웍스</div>'
-        + '<div>대표자: 김현관</div>'
+        + '<div style="position:relative;padding-right:46px;">대표자: 김현관'
+        + '<img class="rpt-seal-inline" style="position:absolute;top:50%;right:0;transform:translateY(-50%);" src="data:image/png;base64,' + SEAL_IMG_B64 + '" alt="모먼트웍스 직인">'
+        + '</div>'
         + '<div>대표번호: 010-9952-9829</div>'
         + '</td>'
         + '</tr>'
