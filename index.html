@@ -279,7 +279,7 @@
 
       <div class="field">
         <label for="f-client-phone">연락처</label>
-        <input type="tel" id="f-client-phone" placeholder="010-0000-0000">
+        <input type="tel" id="f-client-phone" placeholder="010-0000-0000" oninput="this.value = momentWorksFormatPhone(this.value)">
       </div>
 
       <div class="field">
@@ -586,6 +586,15 @@
     }
 
     function pad(n){ return n.toString().padStart(2,'0'); }
+
+    // 연락처 입력 중 자동으로 하이픈(-)을 넣어줌 (예: 01000001234 -> 010-0000-1234)
+    function momentWorksFormatPhone(val){
+      var d = (val || '').replace(/[^0-9]/g, '').slice(0, 11);
+      if(d.length < 4) return d;
+      if(d.length < 7) return d.slice(0,3) + '-' + d.slice(3);
+      if(d.length <= 10) return d.slice(0,3) + '-' + d.slice(3, d.length-4) + '-' + d.slice(d.length-4);
+      return d.slice(0,3) + '-' + d.slice(3,7) + '-' + d.slice(7,11);
+    }
     function fmtDate(d){ return d.getFullYear()+'.'+pad(d.getMonth()+1)+'.'+pad(d.getDate()); }
 
     // default today's date for consult/contract date fields
@@ -963,7 +972,8 @@
       var pdf = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4', compress: true });
       var pageWidthMM = pdf.internal.pageSize.getWidth();
       var pageHeightMM = pdf.internal.pageSize.getHeight();
-      var marginTopMM = 6;
+      var marginTopMM = 6;         // 1페이지 상단 여백
+      var marginTopContinueMM = 16; // 2페이지 이후 상단 여백 (조금 더 여유있게)
       var marginBottomMM = 6;
       var usableHeightMM = pageHeightMM - marginTopMM - marginBottomMM;
 
@@ -1021,7 +1031,8 @@
         var sliceHeightMM = sliceHeightPx / pxPerMM;
 
         if(!firstPage) pdf.addPage();
-        pdf.addImage(sliceImgData, 'JPEG', 0, marginTopMM, imgWidthMM, sliceHeightMM, undefined, 'FAST');
+        var yOffset = firstPage ? marginTopMM : marginTopContinueMM;
+        pdf.addImage(sliceImgData, 'JPEG', 0, yOffset, imgWidthMM, sliceHeightMM, undefined, 'FAST');
         firstPage = false;
 
         pageStartPx = pageEndPx;
@@ -1073,6 +1084,10 @@
       const signerName =
       document.getElementById("f-signer-name").value.trim();
 
+      // 지역
+      const regionVal =
+      document.getElementById("f-region").value.trim();
+
       // 날짜에서 - 제거
       const safeDate =
       (weddingDate || "날짜미입력")
@@ -1088,9 +1103,15 @@
       (signerName || "계약자")
       .replace(/\s+/g, "");
 
+      // 지역 공백 제거 (없으면 표기 생략)
+      const safeRegion =
+      regionVal.replace(/\s+/g, "");
+
       // 문서 제목(파일명/이메일 제목 공통) 및 최종 파일명
+      // 형식 : [모먼트웍스] 축의대 대행 서비스 계약서(20261031_1130)_홍길동(경기/고양)
       const docTitle =
-      `[모먼트웍스] 축의대 대행 서비스 계약서(${safeDate}_${safeTime})_${safeName}`;
+      `[모먼트웍스] 축의대 대행 서비스 계약서(${safeDate}_${safeTime})_${safeName}` +
+      (safeRegion ? `(${safeRegion})` : '');
       const fileName = `${docTitle}.pdf`;
 
       try{
