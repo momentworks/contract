@@ -230,6 +230,11 @@
       </div>
 
       <div class="field">
+        <label for="f-region">지역</label>
+        <input type="text" id="f-region" placeholder="예: 서울/청담">
+      </div>
+
+      <div class="field">
         <label for="f-side">한측 / 양측 / 통합</label>
         <select id="f-side" onchange="momentWorksApplySide()">
           <option value="">선택</option>
@@ -675,6 +680,7 @@
         '예식시간: ' + v('f-time'),
         '예식장: ' + v('f-venue'),
         '홀명: ' + v('f-hall'),
+        '지역: ' + v('f-region'),
         '계약자: ' + v('f-client'),
         '상담일: ' + v('f-consult-date'),
         '신랑 하객인원: ' + v('f-groom-guests') + '명',
@@ -899,6 +905,7 @@
         weddingTime: v('f-time'),
         venue: v('f-venue'),
         hall: v('f-hall'),
+        region: v('f-region'),
         side: v('f-side'),
         total: v('f-total'),
         deposit: v('f-deposit'),
@@ -910,13 +917,14 @@
       };
     }
 
-    // "[모먼트웍스] 운영 설정서(예식일_예식시작시간)_계약자성함(예식장)" 형태의 공통 이름 생성
+    // "[모먼트웍스] 축의대 대행 서비스 계약서(예식날짜_예식시간)_(계약사항)성함(지역)" 형태의 공통 이름 생성
     function buildContractName(){
       var date = (document.getElementById('f-date').value || '').replace(/-/g,'');
       var time = (document.getElementById('f-time').value || '').replace(/:/g,'');
+      var side = document.getElementById('f-side').value.trim();
       var name = document.getElementById('f-signer-name').value.trim();
-      var venue = document.getElementById('f-venue').value.trim();
-      return '[모먼트웍스] 운영 설정서(' + date + '_' + time + ')_' + name + '(' + venue + ')';
+      var region = document.getElementById('f-region').value.trim();
+      return '[모먼트웍스] 축의대 대행 서비스 계약서(' + date + '_' + time + ')_(' + side + ')' + name + '(' + region + ')';
     }
 
     // 실제 텍스트 + 한글 폰트(전체 임베딩)로 계약서 PDF를 생성 (텍스트 선택/복사 가능, 자동 페이지네이션)
@@ -943,6 +951,7 @@
       pdfDrawSectionTitle(ctx, '1. 계약 정보', 0);
       pdfRow4(ctx, '예식일', fmtDateWithDay(v('f-date')), '예식시간', v('f-time'));
       pdfRow4(ctx, '예식장', v('f-venue'), '홀명', v('f-hall'));
+      pdfRowFull(ctx, '지역', v('f-region'));
       pdfRowFull(ctx, '계약자', v('f-client'));
       pdfRow4(ctx, '상담일', v('f-consult-date'), '한측/양측/통합', v('f-side'));
       pdfRow4(ctx, '신랑 하객인원', v('f-groom-guests') + '명', '신부 하객인원', v('f-bride-guests') + '명');
