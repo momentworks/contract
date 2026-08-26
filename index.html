@@ -319,11 +319,14 @@
       <div class="sec-title"><span class="sec-num">2</span>서비스 범위</div>
       <ul class="info-list">
         <li>축의금 접수 및 기록</li>
-        <li>하객 응대</li>
-        <li>식권 배부</li>
-        <li>축의금 정산 및 인계</li>
-        <li>축의금 인계</li>
-        <li>「Moment Works 축의대 대행 운영 설정서」에 따른 기타 업무<br><span class="hint">※ 예식 30일 이전에 별도 송부 예정</span></li>
+        <li>하객 응대 및 식권 배부</li>
+        <li>방명록 · 봉투 이중 관리</li>
+        <li>영상 촬영 및 촬영 링크 공유 (한 측당 카메라 1대 제공 · 추가 거치 시 별도 문의)</li>
+        <li>실시간 축의 상세내역 확인 링크 공유 (모먼트웍스 전용 시스템)</li>
+        <li>축의금 인계 확인서 제공</li>
+        <li>정산 세부내역서 파일 전달 (요청 시 인쇄도 가능)</li>
+        <li>하객 안내문 제작 및 비치(요청 시)</li>
+        <li>화환 사진 촬영 및 전달(요청 시)</li>
       </ul>
     </div>
 
@@ -784,9 +787,10 @@
       // 오프라인에서 fonttools로 미리 안전하게 서브셋(한글 전체 음절 + 영문/숫자/기호)한 폰트를
       // momentworks/contract 저장소(fonts 폴더)에 올려두고 raw.githubusercontent.com으로 불러옴
       // (jsDelivr GitHub CDN은 새로 푸시된 파일이 캐시에 반영되기까지 지연이 있을 수 있어 제외)
+      // 나눔명조(세리프) 사용 - 청첩장/계약서류에 어울리는 고급스러운 느낌
       // Bold는 별도 파일을 쓰지 않고 Regular 한 벌만 임베딩해 PDF 용량을 절반 가까이 줄임
       // (제목/라벨 구분은 배경색·밑줄·글자 크기로 대체)
-      regular: 'https://raw.githubusercontent.com/momentworks/contract/main/fonts/NanumGothic-Regular-subset.ttf'
+      regular: 'https://raw.githubusercontent.com/momentworks/contract/main/fonts/NanumMyeongjo-Regular-subset.ttf'
     };
     var _pdfFontBytesCache = null;
     // 한글 전체 글자가 담긴 원본 폰트를 최초 1회만 내려받아 캐시
@@ -1094,11 +1098,14 @@
       pdfDrawSectionTitle(ctx, '2. 서비스 범위');
       pdfDrawBulletList(ctx, [
         '축의금 접수 및 기록',
-        '하객 응대',
-        '식권 배부',
-        '축의금 정산 및 인계',
-        '축의금 인계',
-        '「Moment Works 축의대 대행 운영 설정서」에 따른 기타 업무 (예식 30일 이전 별도 송부)'
+        '하객 응대 및 식권 배부',
+        '방명록 · 봉투 이중 관리',
+        '영상 촬영 및 촬영 링크 공유 (한 측당 카메라 1대 제공 · 추가 거치 시 별도 문의)',
+        '실시간 축의 상세내역 확인 링크 공유 (모먼트웍스 전용 시스템)',
+        '축의금 인계 확인서 제공',
+        '정산 세부내역서 파일 전달 (요청 시 인쇄도 가능)',
+        '하객 안내문 제작 및 비치(요청 시)',
+        '화환 사진 촬영 및 전달(요청 시)'
       ]);
 
       // ===== 3. 계약금 및 결제 =====
@@ -1113,6 +1120,7 @@
       ctx.y -= 4;
       pdfDrawParagraph(ctx, '계약금 납부 계좌: 카카오뱅크 3333-37-9293260 / 예금주: 김현관(모먼트웍스)', { size: 8.5, lineH: 12, color: PDF_C_MUTED });
       pdfDrawParagraph(ctx, '잔금은 할인 혜택 적용에 따라 변동(차감)될 수 있습니다.', { size: 8.5, lineH: 12, color: PDF_C_MUTED });
+      pdfDrawParagraph(ctx, '현금영수증은 잔금 정산일 포함 5일 이내에 계약금+잔금 기준으로 발행합니다.', { size: 8.5, lineH: 12, color: PDF_C_MUTED });
 
       // ===== 4. 계약의 성립 =====
       pdfDrawSectionTitle(ctx, '4. 계약의 성립');
@@ -1131,7 +1139,7 @@
         var d30 = new Date(wedding); d30.setDate(d30.getDate() - 30);
         var d29 = new Date(wedding); d29.setDate(d29.getDate() - 29);
         d60Label = '예식일 60일 이전\n(' + fmtDate(d60) + '까지)';
-        d30Label = '예식일 30일~59일\n이전\n(' + fmtDate(d30) + '까지)';
+        d30Label = '예식일 30일~59일 이전까지\n(' + fmtDate(d30) + '까지)';
         d29Label = '예식일 29일 이전부터\n(' + fmtDate(d29) + '부터)';
       }
       pdfRowFull(ctx, '취소 시점', '환불', cutLabelW, cutValueW);
