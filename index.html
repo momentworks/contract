@@ -806,19 +806,25 @@
     }
 
     // 페이지/여백/색상 등 레이아웃 상수 (A4, pt 단위)
-    var PDF_PAGE_W = 595.28, PDF_PAGE_H = 841.89, PDF_MARGIN = 40;
+    var PDF_PAGE_W = 595.28, PDF_PAGE_H = 841.89, PDF_MARGIN = 44;
+    var PDF_BOTTOM_MARGIN = 54; // 하단 푸터 공간 확보
     var PDF_CONTENT_W = PDF_PAGE_W - PDF_MARGIN * 2;
-    var PDF_LABEL_W = 116, PDF_VAL_FULL_W = PDF_CONTENT_W - PDF_LABEL_W, PDF_VAL_HALF_W = (PDF_CONTENT_W - PDF_LABEL_W * 2) / 2;
+    var PDF_LABEL_W = 120, PDF_VAL_FULL_W = PDF_CONTENT_W - PDF_LABEL_W, PDF_VAL_HALF_W = (PDF_CONTENT_W - PDF_LABEL_W * 2) / 2;
+    var PDF_HERO_H = 92;   // 1페이지 상단 히어로 배너 높이
+    var PDF_BAND_H = 34;   // 2페이지 이후 상단 연속 헤더 띠 높이
 
     function pdfColor(hex){
       var r = parseInt(hex.substr(0,2),16)/255, g = parseInt(hex.substr(2,2),16)/255, b = parseInt(hex.substr(4,2),16)/255;
       return PDFLib.rgb(r,g,b);
     }
-    var PDF_C_TEXT = pdfColor('1a1a1a');
-    var PDF_C_MUTED = pdfColor('555555');
+    var PDF_C_TEXT = pdfColor('2B2A28');
+    var PDF_C_MUTED = pdfColor('7A756C');
     var PDF_C_WINE = pdfColor('6E2430');
-    var PDF_C_LABEL_BG = pdfColor('F7F4EE');
-    var PDF_C_BORDER = pdfColor('CCCCCC');
+    var PDF_C_WINE_DARK = pdfColor('4C1620');
+    var PDF_C_GOLD = pdfColor('B08D57');
+    var PDF_C_CREAM = pdfColor('FAF6EC');
+    var PDF_C_LABEL_BG = pdfColor('FAF6EC');
+    var PDF_C_BORDER = pdfColor('E4DBC8');
     var PDF_C_WHITE = pdfColor('FFFFFF');
 
     // 한 줄 텍스트를 주어진 너비에 맞춰 단어 단위로 줄바꿈 (단어 하나가 너무 길면 글자 단위로 보조 처리)
@@ -862,35 +868,94 @@
       return lines;
     }
 
+    // 글자 간격을 살짝 벌려 그리는 헬퍼 (히어로 타이틀의 고급스러운 트래킹 효과용)
+    function pdfDrawTracked(page, text, opts){
+      var x = opts.x, y = opts.y, size = opts.size, font = opts.font, color = opts.color, tracking = opts.tracking || 0;
+      for(var i = 0; i < text.length; i++){
+        var ch = text[i];
+        page.drawText(ch, { x: x, y: y, size: size, font: font, color: color });
+        x += font.widthOfTextAtSize(ch, size) + tracking;
+      }
+      return x;
+    }
+    function pdfTrackedWidth(text, font, size, tracking){
+      var w = 0;
+      for(var i = 0; i < text.length; i++){ w += font.widthOfTextAtSize(text[i], size) + (tracking || 0); }
+      return w - (tracking || 0);
+    }
+
     function pdfNewPage(ctx){
+      ctx.pageNum = (ctx.pageNum || 0) + 1;
       ctx.page = ctx.pdfDoc.addPage([PDF_PAGE_W, PDF_PAGE_H]);
-      ctx.y = PDF_PAGE_H - PDF_MARGIN;
+
+      if(ctx.pageNum === 1){
+        // ===== 1페이지: 딥와인 히어로 배너 + 골드 포인트 라인 =====
+        ctx.page.drawRectangle({ x: 0, y: PDF_PAGE_H - PDF_HERO_H, width: PDF_PAGE_W, height: PDF_HERO_H, color: PDF_C_WINE_DARK });
+        ctx.page.drawRectangle({ x: 0, y: PDF_PAGE_H - PDF_HERO_H - 2.5, width: PDF_PAGE_W, height: 2.5, color: PDF_C_GOLD });
+
+        var brand = 'MOMENT WORKS', brandSize = 21, brandTracking = 3.2;
+        var brandW = pdfTrackedWidth(brand, ctx.fontB, brandSize, brandTracking);
+        pdfDrawTracked(ctx.page, brand, { x: PDF_MARGIN + (PDF_CONTENT_W - brandW) / 2, y: PDF_PAGE_H - 44, size: brandSize, font: ctx.fontB, color: PDF_C_WHITE, tracking: brandTracking });
+
+        var sub = '축의대 대행 서비스 계약서', subSize = 12.5;
+        var subW = ctx.fontR.widthOfTextAtSize(sub, subSize);
+        ctx.page.drawText(sub, { x: PDF_MARGIN + (PDF_CONTENT_W - subW) / 2, y: PDF_PAGE_H - 68, size: subSize, font: ctx.fontR, color: PDF_C_GOLD });
+
+        ctx.y = PDF_PAGE_H - PDF_HERO_H - 28;
+      } else {
+        // ===== 2페이지 이후: 얇은 와인 톤 연속 헤더 띠 =====
+        ctx.page.drawRectangle({ x: 0, y: PDF_PAGE_H - PDF_BAND_H, width: PDF_PAGE_W, height: PDF_BAND_H, color: PDF_C_WINE });
+        ctx.page.drawRectangle({ x: 0, y: PDF_PAGE_H - PDF_BAND_H - 1.5, width: PDF_PAGE_W, height: 1.5, color: PDF_C_GOLD });
+        ctx.page.drawText('MOMENT WORKS · 축의대 대행 서비스 계약서', { x: PDF_MARGIN, y: PDF_PAGE_H - PDF_BAND_H / 2 - 3.5, size: 9, font: ctx.fontR, color: PDF_C_WHITE });
+        ctx.y = PDF_PAGE_H - PDF_BAND_H - 26;
+      }
     }
     function pdfEnsureSpace(ctx, h){
-      if(ctx.y - h < PDF_MARGIN){ pdfNewPage(ctx); }
+      if(ctx.y - h < PDF_BOTTOM_MARGIN){ pdfNewPage(ctx); }
+    }
+    // 모든 페이지 하단에 골드 라인 + 워터마크 문구 + 페이지 번호를 그려 넣는 마무리 작업 (전체 페이지 수를 알아야 하므로 맨 마지막에 실행)
+    function pdfDrawFooters(ctx){
+      var pages = ctx.pdfDoc.getPages();
+      var total = pages.length;
+      pages.forEach(function(page, idx){
+        var footerY = 30;
+        page.drawLine({ start: { x: PDF_MARGIN, y: footerY + 14 }, end: { x: PDF_MARGIN + PDF_CONTENT_W, y: footerY + 14 }, thickness: 0.75, color: PDF_C_GOLD });
+        page.drawText('MOMENT WORKS · 축의대 대행 서비스', { x: PDF_MARGIN, y: footerY, size: 7.5, font: ctx.fontR, color: PDF_C_MUTED });
+        var pageLabel = (idx + 1) + ' / ' + total;
+        var plW = ctx.fontR.widthOfTextAtSize(pageLabel, 7.5);
+        page.drawText(pageLabel, { x: PDF_MARGIN + PDF_CONTENT_W - plW, y: footerY, size: 7.5, font: ctx.fontR, color: PDF_C_MUTED });
+      });
     }
 
-    function pdfDrawTitle(ctx, text){
-      var size = 18;
-      pdfEnsureSpace(ctx, size + 26);
-      var w = ctx.fontB.widthOfTextAtSize(text, size);
-      ctx.page.drawText(text, { x: PDF_MARGIN + (PDF_CONTENT_W - w) / 2, y: ctx.y - size, size: size, font: ctx.fontB, color: PDF_C_TEXT });
-      ctx.y -= (size + 26);
-    }
-
+    // 섹션 제목: "1. 계약 정보" 형태의 문자열에서 번호를 추출해 작은 와인색 배지로, 나머지는 타이틀로 표시
     function pdfDrawSectionTitle(ctx, text, topGap){
-      var size = 12.5;
-      pdfEnsureSpace(ctx, (topGap == null ? 18 : topGap) + size + 12);
-      ctx.y -= (topGap == null ? 18 : topGap);
-      ctx.page.drawText(text, { x: PDF_MARGIN, y: ctx.y - size, size: size, font: ctx.fontB, color: PDF_C_WINE });
-      ctx.y -= (size + 6);
-      ctx.page.drawLine({ start: { x: PDF_MARGIN, y: ctx.y }, end: { x: PDF_MARGIN + PDF_CONTENT_W, y: ctx.y }, thickness: 1.3, color: PDF_C_WINE });
-      ctx.y -= 10;
+      var size = 12;
+      var badgeSize = size + 5;
+      var gap = (topGap == null ? 20 : topGap);
+      pdfEnsureSpace(ctx, gap + badgeSize + 18);
+      ctx.y -= gap;
+
+      var m = /^(\d+)\.\s*(.*)$/.exec(text);
+      var num = m ? m[1] : '';
+      var label = m ? m[2] : text;
+
+      if(num){
+        ctx.page.drawRectangle({ x: PDF_MARGIN, y: ctx.y - badgeSize, width: badgeSize, height: badgeSize, color: PDF_C_WINE });
+        var numW = ctx.fontB.widthOfTextAtSize(num, 9.5);
+        ctx.page.drawText(num, { x: PDF_MARGIN + (badgeSize - numW) / 2, y: ctx.y - badgeSize + (badgeSize - 9.5) / 2 + 1.5, size: 9.5, font: ctx.fontB, color: PDF_C_WHITE });
+        ctx.page.drawText(label, { x: PDF_MARGIN + badgeSize + 8, y: ctx.y - badgeSize + (badgeSize - size) / 2 + 1.5, size: size, font: ctx.fontB, color: PDF_C_WINE });
+      } else {
+        ctx.page.drawText(label, { x: PDF_MARGIN, y: ctx.y - size, size: size, font: ctx.fontB, color: PDF_C_WINE });
+      }
+
+      ctx.y -= (badgeSize + 6);
+      ctx.page.drawLine({ start: { x: PDF_MARGIN, y: ctx.y }, end: { x: PDF_MARGIN + PDF_CONTENT_W, y: ctx.y }, thickness: 0.75, color: PDF_C_GOLD });
+      ctx.y -= 12;
     }
 
     // 표 형태의 행(라벨:값 1쌍 또는 2쌍) - cells의 각 항목은 {label,value,labelW,valueW}
     function pdfDrawRow(ctx, cells){
-      var size = 9.5, lineH = 13, padX = 8, padY = 6;
+      var size = 9.5, lineH = 13, padX = 10, padY = 7;
       var cellData = cells.map(function(c){
         return {
           labelLines: pdfWrapText(c.label, ctx.fontB, size, c.labelW - padX * 2),
@@ -904,15 +969,18 @@
       pdfEnsureSpace(ctx, rowH);
       var top = ctx.y, bottom = ctx.y - rowH, x = PDF_MARGIN;
       cellData.forEach(function(cd){
-        ctx.page.drawRectangle({ x: x, y: bottom, width: cd.labelW, height: rowH, color: PDF_C_LABEL_BG, borderColor: PDF_C_BORDER, borderWidth: 0.75 });
+        // 라벨: 은은한 크림 배경 + 와인색 글자 (테두리 없이 배경 톤으로만 구분)
+        ctx.page.drawRectangle({ x: x, y: bottom, width: cd.labelW, height: rowH, color: PDF_C_CREAM });
         var ly = top - padY - size;
-        cd.labelLines.forEach(function(line){ ctx.page.drawText(line, { x: x + padX, y: ly, size: size, font: ctx.fontB, color: PDF_C_TEXT }); ly -= lineH; });
+        cd.labelLines.forEach(function(line){ ctx.page.drawText(line, { x: x + padX, y: ly, size: size, font: ctx.fontB, color: PDF_C_WINE }); ly -= lineH; });
         x += cd.labelW;
-        ctx.page.drawRectangle({ x: x, y: bottom, width: cd.valueW, height: rowH, color: PDF_C_WHITE, borderColor: PDF_C_BORDER, borderWidth: 0.75 });
+        // 값: 배경 없이 차콜 톤 텍스트
         var vy = top - padY - size;
         cd.valueLines.forEach(function(line){ ctx.page.drawText(line, { x: x + padX, y: vy, size: size, font: ctx.fontR, color: PDF_C_TEXT }); vy -= lineH; });
         x += cd.valueW;
       });
+      // 행 하단에 얇은 구분선 한 줄만 (그리드 없는 미니멀 레저 스타일)
+      ctx.page.drawLine({ start: { x: PDF_MARGIN, y: bottom }, end: { x: PDF_MARGIN + PDF_CONTENT_W, y: bottom }, thickness: 0.6, color: PDF_C_BORDER });
       ctx.y = bottom;
     }
     function pdfRowFull(ctx, label, value, labelW, valueW){
@@ -947,7 +1015,7 @@
       items.forEach(function(item){
         var lines = pdfWrapText(item, ctx.fontR, size, PDF_CONTENT_W - 14);
         pdfEnsureSpace(ctx, lines.length * lineH + 3);
-        ctx.page.drawText('•', { x: PDF_MARGIN + 2, y: ctx.y - size, size: size, font: ctx.fontR, color: PDF_C_TEXT });
+        ctx.page.drawText('•', { x: PDF_MARGIN + 2, y: ctx.y - size, size: size, font: ctx.fontR, color: PDF_C_WINE });
         lines.forEach(function(line){
           ctx.page.drawText(line, { x: PDF_MARGIN + 14, y: ctx.y - size, size: size, font: ctx.fontR, color: PDF_C_TEXT });
           ctx.y -= lineH;
@@ -1008,8 +1076,7 @@
 
       // PDF 문서 제목(메타데이터)을 파일명 및 메일 제목과 동일하게 설정
       pdfDoc.setTitle(buildContractName());
-
-      pdfDrawTitle(ctx, 'MOMENT WORKS 축의대 대행 서비스 계약서');
+      // 문서 제목은 pdfNewPage()의 1페이지 히어로 배너에서 자동으로 그려짐
 
       // ===== 1. 계약 정보 =====
       pdfDrawSectionTitle(ctx, '1. 계약 정보', 0);
@@ -1136,6 +1203,9 @@
       }
 
       ctx.y = Math.min(ly, ry) - 10;
+
+      // 전체 페이지 수가 확정된 시점에 모든 페이지 하단에 푸터를 일괄 렌더링
+      pdfDrawFooters(ctx);
 
       var pdfBytes = await pdfDoc.save();
       var binary = '';
