@@ -698,9 +698,12 @@
     }
 
     // ============================================================
-    // 텍스트 선택/복사가 가능한 PDF 생성 (pdf-lib + 폰트 서브셋)
-    // 캡처 이미지 대신 실제 텍스트를 그려 넣고, 문서에 실제 사용된
-    // 한글 글자만 추려낸 초소형 서브셋 폰트를 삽입하여 용량을 최소화한다.
+    // 텍스트 선택/복사가 가능한 PDF 생성 (pdf-lib + 사전 서브셋 한글 폰트)
+    // 캡처 이미지 대신 실제 텍스트를 그려 넣어 텍스트 선택/복사가 가능하게 한다.
+    // 폰트는 fonttools로 오프라인에서 미리 안전하게 서브셋(한글 전체 음절 +
+    // 영문/숫자/기호)한 뒤 GitHub(momentworks/contract 저장소 fonts 폴더)에
+    // 올려두고 사용한다. (참고: pdf-lib/fontkit의 런타임 subset:true는 CJK
+    // 폰트에서 일부 글리프가 누락되는 알려진 버그가 있어 사용하지 않는다.)
     // ============================================================
 
     // 금액 문자열을 천 단위 콤마 표기로 변환 (숫자가 아니면 원본 그대로 반환)
@@ -711,18 +714,19 @@
     }
 
     var PDF_FONT_URLS = {
-      // CFF(OTF) 폰트는 pdf-lib/fontkit의 서브셋 처리에서 오류가 발생할 수 있어,
-      // TrueType(glyf 외곽선, .ttf) 폰트로 교체하여 안정적으로 서브셋되도록 함
-      regular: 'https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/nanumgothic/NanumGothic-Regular.ttf',
-      bold: 'https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/nanumgothic/NanumGothic-Bold.ttf'
+      // 오프라인에서 fonttools로 미리 안전하게 서브셋(한글 전체 음절 + 영문/숫자/기호)한 폰트를
+      // momentworks/contract 저장소(fonts 폴더)에 올려두고 raw.githubusercontent.com으로 불러옴
+      // (jsDelivr GitHub CDN은 새로 푸시된 파일이 캐시에 반영되기까지 지연이 있을 수 있어 제외)
+      // Bold는 별도 파일을 쓰지 않고 Regular 한 벌만 임베딩해 PDF 용량을 절반 가까이 줄임
+      // (제목/라벨 구분은 배경색·밑줄·글자 크기로 대체)
+      regular: 'https://raw.githubusercontent.com/momentworks/contract/main/fonts/NanumGothic-Regular-subset.ttf'
     };
     var _pdfFontBytesCache = null;
-    // 한글 전체 글자가 담긴 원본 폰트를 최초 1회만 내려받아 캐시 (실제 임베딩 시점에 서브셋 처리됨)
+    // 한글 전체 글자가 담긴 원본 폰트를 최초 1회만 내려받아 캐시
     async function loadPdfFontBytes(){
       if(_pdfFontBytesCache){ return _pdfFontBytesCache; }
       var reg = await fetch(PDF_FONT_URLS.regular).then(function(r){ return r.arrayBuffer(); });
-      var bold = await fetch(PDF_FONT_URLS.bold).then(function(r){ return r.arrayBuffer(); });
-      _pdfFontBytesCache = { regular: reg, bold: bold };
+      _pdfFontBytesCache = { regular: reg };
       return _pdfFontBytesCache;
     }
 
@@ -800,7 +804,7 @@
     }
 
     function pdfDrawTitle(ctx, text){
-      var size = 16;
+      var size = 18;
       pdfEnsureSpace(ctx, size + 26);
       var w = ctx.fontB.widthOfTextAtSize(text, size);
       ctx.page.drawText(text, { x: PDF_MARGIN + (PDF_CONTENT_W - w) / 2, y: ctx.y - size, size: size, font: ctx.fontB, color: PDF_C_TEXT });
@@ -808,10 +812,10 @@
     }
 
     function pdfDrawSectionTitle(ctx, text, topGap){
-      var size = 12;
+      var size = 12.5;
       pdfEnsureSpace(ctx, (topGap == null ? 18 : topGap) + size + 12);
       ctx.y -= (topGap == null ? 18 : topGap);
-      ctx.page.drawText(text, { x: PDF_MARGIN, y: ctx.y - size, size: size, font: ctx.fontB, color: PDF_C_TEXT });
+      ctx.page.drawText(text, { x: PDF_MARGIN, y: ctx.y - size, size: size, font: ctx.fontB, color: PDF_C_WINE });
       ctx.y -= (size + 6);
       ctx.page.drawLine({ start: { x: PDF_MARGIN, y: ctx.y }, end: { x: PDF_MARGIN + PDF_CONTENT_W, y: ctx.y }, thickness: 1.3, color: PDF_C_WINE });
       ctx.y -= 10;
@@ -915,7 +919,7 @@
       return '[모먼트웍스] 운영 설정서(' + date + '_' + time + ')_' + name + '(' + venue + ')';
     }
 
-    // 실제 텍스트 + 서브셋 한글 폰트로 3페이지 분량의 계약서 PDF를 생성 (텍스트 선택/복사 가능)
+    // 실제 텍스트 + 한글 폰트(전체 임베딩)로 계약서 PDF를 생성 (텍스트 선택/복사 가능, 자동 페이지네이션)
     async function generateContractPdfBase64(){
       var v = function(id){ return document.getElementById(id).value || '-'; };
       var agreeText = document.getElementById('f-agree').checked ? '계약금 입금으로 서명을 갈음함 (동의함)' : '(미동의)';
@@ -925,9 +929,10 @@
       var fontBytes = await loadPdfFontBytes();
       var pdfDoc = await PDFLib.PDFDocument.create();
       pdfDoc.registerFontkit(window.fontkit);
-      // subset:true → 문서에 실제로 그려진 글자만 추려 초소형 서브셋 폰트로 임베딩
-      var fontR = await pdfDoc.embedFont(fontBytes.regular, { subset: true });
-      var fontB = await pdfDoc.embedFont(fontBytes.bold, { subset: true });
+      // 이미 오프라인에서 안전하게 서브셋된 폰트이므로 런타임 subset:true(버그 있는 CJK 서브셋 처리)는 사용하지 않음
+      var fontR = await pdfDoc.embedFont(fontBytes.regular, { subset: false });
+      // 별도의 Bold 파일 없이 동일한 폰트 객체를 재사용 (PDF에는 폰트 리소스가 1개만 포함되어 용량 최소화)
+      var fontB = fontR;
 
       var ctx = { pdfDoc: pdfDoc, fontR: fontR, fontB: fontB };
       pdfNewPage(ctx);
@@ -970,8 +975,8 @@
       // ===== 4. 계약의 성립 =====
       pdfDrawSectionTitle(ctx, '4. 계약의 성립');
       pdfDrawParaList(ctx, [
-        '① 본 계약은 위탁자가 계약 내용을 확인한 후 계약금을 납부한 시점에 성립한 것으로 본다.',
-        '② 위탁자가 계약금을 납부한 경우, 본 계약의 모든 내용을 충분히 확인하고 이에 동의한 것으로 본다. 또한 계약금의 납부는 계약 내용 또는 날인에 갈음하는 의사표시로 보며, 별도의 서명 또는 날인이 없더라도 본 계약은 유효하게 성립하고 그 효력을 가진다.'
+        '(1) 본 계약은 위탁자가 계약 내용을 확인한 후 계약금을 납부한 시점에 성립한 것으로 본다.',
+        '(2) 위탁자가 계약금을 납부한 경우, 본 계약의 모든 내용을 충분히 확인하고 이에 동의한 것으로 본다. 또한 계약금의 납부는 계약 내용 또는 날인에 갈음하는 의사표시로 보며, 별도의 서명 또는 날인이 없더라도 본 계약은 유효하게 성립하고 그 효력을 가진다.'
       ]);
 
       // ===== 5. 취소 및 환불 규정 =====
@@ -995,29 +1000,29 @@
       // ===== 6. 수탁자의 귀책사유에 따른 계약 해지 및 손해배상 =====
       pdfDrawSectionTitle(ctx, '6. 수탁자의 귀책사유에 따른 계약 해지 및 손해배상');
       pdfDrawParaList(ctx, [
-        '① 수탁자의 귀책사유로 계약을 일방적으로 해지하거나 정당한 사유 없이 계약상 서비스를 제공하지 못한 경우, 수탁자는 위탁자에게 기납부된 계약금을 전액 환불하고, 추가로 계약금 상당액을 보상금으로 지급한다.',
+        '(1) 수탁자의 귀책사유로 계약을 일방적으로 해지하거나 정당한 사유 없이 계약상 서비스를 제공하지 못한 경우, 수탁자는 위탁자에게 기납부된 계약금을 전액 환불하고, 추가로 계약금 상당액을 보상금으로 지급한다.',
         '단, 천재지변, 전쟁, 정부의 명령 또는 조치, 감염병 확산에 따른 제한, 교통·통신의 마비 등 수탁자가 합리적으로 예측하거나 통제할 수 없는 불가항력적인 사유로 서비스를 제공하지 못한 경우에는 본 조를 적용하지 않는다.'
       ]);
 
       // ===== 7. 책임 및 면책 =====
       pdfDrawSectionTitle(ctx, '7. 책임 및 면책');
       pdfDrawParaList(ctx, [
-        '① 회사는 계약된 범위 내에서 선량한 관리자의 주의의무를 다하여 서비스를 제공합니다.',
-        '② 축의금은 기록 후 대리인(사전협의)에게 인계하며, 인계확인서 서명완료 시 관리 책임은 고객에게 이전됩니다.',
-        '③ 천재지변 등 불가항력 사유는 상호 협의합니다.'
+        '(1) 회사는 계약된 범위 내에서 선량한 관리자의 주의의무를 다하여 서비스를 제공합니다.',
+        '(2) 축의금은 기록 후 대리인(사전협의)에게 인계하며, 인계확인서 서명완료 시 관리 책임은 고객에게 이전됩니다.',
+        '(3) 천재지변 등 불가항력 사유는 상호 협의합니다.'
       ]);
 
       // ===== 8. 개인정보 =====
       pdfDrawSectionTitle(ctx, '8. 개인정보');
-      pdfDrawParaList(ctx, ['① 서비스 제공 목적 외에는 개인정보를 사용하지 않으며 관련 법령에 따라 관리합니다.']);
+      pdfDrawParaList(ctx, ['(1) 서비스 제공 목적 외에는 개인정보를 사용하지 않으며 관련 법령에 따라 관리합니다.']);
 
       // ===== 9. 기타사항 =====
       pdfDrawSectionTitle(ctx, '9. 기타사항');
       pdfDrawParaList(ctx, [
-        '① 세부 운영사항은 고객이 제출한 「Moment Works 축의대 대행 운영 설정서」에 따른다.',
-        '② 운영 설정서에 기재된 내용은 본 계약의 일부로 간주하며, 양 당사자는 해당 내용에 따라 서비스를 진행한다.',
-        '③ 계약 리뷰 이벤트는 계약일로부터 3개월 이내 작성하여야 하며, 본식 진행 리뷰 이벤트는 예식일로부터 2개월 이내 작성하여야 한다. 해당 기간이 경과한 경우에는 리뷰 이벤트 참여 및 혜택 제공이 제한될 수 있다.',
-        '④ 계약자 할인 짝꿍코드는 계약 체결 시 계약서에 기재된 코드만 유효하며, 계약 체결 이후 코드의 변경, 추가 적용 또는 소급 적용은 불가하다.'
+        '(1) 세부 운영사항은 고객이 제출한 「Moment Works 축의대 대행 운영 설정서」에 따른다.',
+        '(2) 운영 설정서에 기재된 내용은 본 계약의 일부로 간주하며, 양 당사자는 해당 내용에 따라 서비스를 진행한다.',
+        '(3) 계약 리뷰 이벤트는 계약일로부터 3개월 이내 작성하여야 하며, 본식 진행 리뷰 이벤트는 예식일로부터 2개월 이내 작성하여야 한다. 해당 기간이 경과한 경우에는 리뷰 이벤트 참여 및 혜택 제공이 제한될 수 있다.',
+        '(4) 계약자 할인 짝꿍코드는 계약 체결 시 계약서에 기재된 코드만 유효하며, 계약 체결 이후 코드의 변경, 추가 적용 또는 소급 적용은 불가하다.'
       ]);
 
       // ===== 계약일자 및 서명 =====
