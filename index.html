@@ -84,6 +84,7 @@
     border-color:var(--gold);box-shadow:0 0 0 3px rgba(184,146,90,0.15);
   }
   .field input[readonly]{background:#EFEAE0;color:var(--muted);}
+  .field input:disabled, .field select:disabled{background:#EFEAE0;color:var(--muted);cursor:not-allowed;opacity:0.7;}
   .field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
   .field .hint{font-size:11.5px;color:var(--muted);margin-top:6px;}
 
@@ -207,8 +208,13 @@
           <input type="date" id="f-date">
         </div>
         <div class="field">
-          <label for="f-time">예식시간</label>
-          <input type="time" id="f-time">
+          <label for="f-time-hour">예식시간 (24시간, 10분 단위)</label>
+          <div style="display:flex;align-items:center;gap:6px;">
+            <select id="f-time-hour" style="flex:1;"></select>
+            <span>:</span>
+            <select id="f-time-min" style="flex:1;"></select>
+          </div>
+          <input type="hidden" id="f-time">
         </div>
       </div>
 
@@ -224,8 +230,34 @@
       </div>
 
       <div class="field">
-        <label for="f-client">계약자 (신랑측 또는 신부측 대표)</label>
-        <input type="text" id="f-client" placeholder="예: (신부) 홍길동">
+        <label for="f-side">한측 / 양측 / 통합</label>
+        <select id="f-side" onchange="momentWorksApplySide()">
+          <option value="">선택</option>
+          <option value="한측">한측 (315,000원 · 기준인원 250명)</option>
+          <option value="양측">양측 (580,000원 · 기준인원 400명)</option>
+          <option value="통합">통합 (315,000원 · 기준인원 150명)</option>
+        </select>
+      </div>
+
+      <div class="field" id="f-han-side-wrap" style="display:none;">
+        <label for="f-han-side">한측 계약 대상</label>
+        <select id="f-han-side" onchange="momentWorksApplyGenderLock()">
+          <option value="">선택</option>
+          <option value="신랑">신랑</option>
+          <option value="신부">신부</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="f-client-name">계약자 (신랑측 또는 신부측 대표)</label>
+        <div style="display:flex;gap:8px;">
+          <select id="f-client-side" style="flex:0 0 90px;">
+            <option value="신랑">신랑</option>
+            <option value="신부">신부</option>
+          </select>
+          <input type="text" id="f-client-name" placeholder="성함" style="flex:1;">
+        </div>
+        <input type="hidden" id="f-client">
       </div>
 
       <div class="field">
@@ -258,16 +290,6 @@
           <label for="f-bride-guests">(신부) 하객인원</label>
           <input type="number" id="f-bride-guests" placeholder="명" min="0">
         </div>
-      </div>
-
-      <div class="field">
-        <label for="f-side">한측 / 양측 / 통합</label>
-        <select id="f-side" onchange="momentWorksApplySide()">
-          <option value="">선택</option>
-          <option value="한측">한측 (315,000원 · 기준인원 250명)</option>
-          <option value="양측">양측 (580,000원 · 기준인원 400명)</option>
-          <option value="통합">통합 (315,000원 · 기준인원 150명)</option>
-        </select>
       </div>
 
       <div class="field-row">
@@ -514,6 +536,51 @@
       });
     })();
 
+    // 계약자 "신랑/신부" 구분 select + 성함 입력을 hidden f-client 값으로 합성 (예: "(신부) 홍길동")
+    (function(){
+      var sideSel = document.getElementById('f-client-side');
+      var nameInput = document.getElementById('f-client-name');
+      var hidden = document.getElementById('f-client');
+      function syncClient(){
+        hidden.value = nameInput.value.trim() ? ('(' + sideSel.value + ') ' + nameInput.value.trim()) : '';
+        hidden.dispatchEvent(new Event('input'));
+      }
+      sideSel.addEventListener('change', syncClient);
+      nameInput.addEventListener('input', syncClient);
+    })();
+
+    // 예식시간: 24시간제 시(00~23) / 10분 단위 분(00,10,...,50) 드롭다운 생성 및 hidden f-time 동기화
+    (function(){
+      var hourSel = document.getElementById('f-time-hour');
+      var minSel = document.getElementById('f-time-min');
+      var hiddenTime = document.getElementById('f-time');
+
+      var hourPlaceholder = document.createElement('option');
+      hourPlaceholder.value = ''; hourPlaceholder.textContent = '시';
+      hourSel.appendChild(hourPlaceholder);
+      for(var h = 0; h < 24; h++){
+        var opt = document.createElement('option');
+        opt.value = pad(h); opt.textContent = pad(h) + '시';
+        hourSel.appendChild(opt);
+      }
+
+      var minPlaceholder = document.createElement('option');
+      minPlaceholder.value = ''; minPlaceholder.textContent = '분';
+      minSel.appendChild(minPlaceholder);
+      for(var m = 0; m < 60; m += 10){
+        var mopt = document.createElement('option');
+        mopt.value = pad(m); mopt.textContent = pad(m) + '분';
+        minSel.appendChild(mopt);
+      }
+
+      function syncHiddenTime(){
+        hiddenTime.value = (hourSel.value && minSel.value) ? (hourSel.value + ':' + minSel.value) : '';
+        hiddenTime.dispatchEvent(new Event('input'));
+      }
+      hourSel.addEventListener('change', syncHiddenTime);
+      minSel.addEventListener('change', syncHiddenTime);
+    })();
+
     // auto-calc refund cutoff dates when wedding date changes
     document.getElementById('f-date').addEventListener('change', function(){
       var val = this.value;
@@ -548,6 +615,31 @@
         document.getElementById('f-base-amount-confirm').value = '';
       }
       momentWorksCalcTotal();
+
+      var hanWrap = document.getElementById('f-han-side-wrap');
+      if(side === '한측'){
+        hanWrap.style.display = '';
+      } else {
+        hanWrap.style.display = 'none';
+        document.getElementById('f-han-side').value = '';
+        momentWorksApplyGenderLock();
+      }
+    }
+
+    // 한측 계약 시 선택한 신랑/신부에 따라 반대쪽 관련 입력칸을 모두 비활성화(+초기화)
+    function momentWorksApplyGenderLock(){
+      var picked = document.getElementById('f-han-side').value; // '신랑' | '신부' | ''
+      var disableGroom = (picked === '신부');
+      var disableBride = (picked === '신랑');
+
+      [document.getElementById('f-groom-name-info'), document.getElementById('f-groom-guests'), document.getElementById('f-groom-name')].forEach(function(el){
+        el.disabled = disableGroom;
+        if(disableGroom){ el.value = ''; }
+      });
+      [document.getElementById('f-bride-name-info'), document.getElementById('f-bride-guests'), document.getElementById('f-bride-name')].forEach(function(el){
+        el.disabled = disableBride;
+        if(disableBride){ el.value = ''; }
+      });
     }
 
     function momentWorksCalcTotal(){
