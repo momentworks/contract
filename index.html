@@ -307,6 +307,11 @@
           <input type="text" id="f-base-amount" placeholder="선택 시 자동 입력" readonly>
         </div>
       </div>
+
+      <div class="field">
+        <label for="f-my-partner-code">나의 짝꿍코드 (자동생성)</label>
+        <input type="text" id="f-my-partner-code" placeholder="성함/예식일/연락처 입력 시 자동 생성" readonly>
+      </div>
     </div>
 
     <!-- 2. 서비스 범위 -->
@@ -506,6 +511,21 @@
 
     function pad(n){ return n.toString().padStart(2,'0'); }
     function fmtDate(d){ return d.getFullYear()+'.'+pad(d.getMonth()+1)+'.'+pad(d.getDate()); }
+
+    // 국어의 로마자 표기법(개정 로마자 표기법) 기준 초성/중성 표기 - 짝꿍코드 자동생성에 사용
+    var RR_CHOSEONG = ['g','kk','n','d','tt','r','m','b','pp','s','ss','','j','jj','ch','k','t','p','h'];
+    var RR_JUNGSEONG = ['a','ae','ya','yae','eo','e','yeo','ye','o','wa','wae','oe','yo','u','wo','we','wi','yu','eu','ui','i'];
+    // 성함의 첫 글자를 표준 로마자 표기의 첫 글자(대문자)로 변환 (한글이 아니면 그대로 대문자화)
+    function romanizeFirstLetter(text){
+      var ch = (text || '').trim().charAt(0);
+      if(!ch){ return ''; }
+      var code = ch.charCodeAt(0) - 0xAC00;
+      if(code < 0 || code > 11171){ return ch.toUpperCase(); }
+      var cho = Math.floor(code / 588);
+      var jung = Math.floor((code % 588) / 28);
+      var romanized = RR_CHOSEONG[cho] + RR_JUNGSEONG[jung];
+      return romanized.charAt(0).toUpperCase();
+    }
     // 'YYYY-MM-DD' 형식의 날짜 문자열에 요일을 붙여서 반환 (예: 2026-05-16 -> 2026-05-16 (토))
     function fmtDateWithDay(iso){
       if(!iso || iso === '-'){ return iso || '-'; }
@@ -566,6 +586,32 @@
       }
       sideSel.addEventListener('change', syncClient);
       nameInput.addEventListener('input', syncClient);
+    })();
+
+    // 짝꿍코드 자동생성: "MW" + 성함 첫글자 표준 로마자 표기(대문자) + 예식월일(MMDD) + 연락처 뒷 2자리
+    (function(){
+      var nameEl = document.getElementById('f-client-name');
+      var dateEl = document.getElementById('f-date');
+      var phoneEl = document.getElementById('f-client-phone');
+      var outEl = document.getElementById('f-my-partner-code');
+
+      function updateMyPartnerCode(){
+        var initial = romanizeFirstLetter(nameEl.value);
+        var dateVal = dateEl.value; // YYYY-MM-DD
+        var mmdd = dateVal ? (dateVal.slice(5,7) + dateVal.slice(8,10)) : '';
+        var phoneDigits = (phoneEl.value || '').replace(/[^0-9]/g, '');
+        var last2 = phoneDigits.slice(-2);
+
+        if(initial && mmdd && last2.length === 2){
+          outEl.value = 'MW' + initial + mmdd + last2;
+        } else {
+          outEl.value = '';
+        }
+      }
+
+      nameEl.addEventListener('input', updateMyPartnerCode);
+      dateEl.addEventListener('change', updateMyPartnerCode);
+      phoneEl.addEventListener('input', updateMyPartnerCode);
     })();
 
     // 예식시간: 24시간제 시(00~23) / 10분 단위 분(00,10,...,50) 드롭다운 생성 및 hidden f-time 동기화
@@ -701,6 +747,7 @@
         '신부 하객인원: ' + v('f-bride-guests') + '명',
         '한측/양측/통합: ' + v('f-side'),
         '기준금액: ' + v('f-base-amount') + '원',
+        '나의 짝꿍코드: ' + v('f-my-partner-code'),
         '',
         '▷ 계약금 및 결제',
         '계약금액: ' + v('f-total') + '원',
@@ -970,6 +1017,7 @@
       pdfRow4(ctx, '상담일', v('f-consult-date'), '한측/양측/통합', v('f-side'));
       pdfRow4(ctx, '신랑 하객인원', v('f-groom-guests') + '명', '신부 하객인원', v('f-bride-guests') + '명');
       pdfRow4(ctx, '기준인원', v('f-base-guests'), '기준금액', fmtMoney(v('f-base-amount')) + '원');
+      pdfRowFull(ctx, '나의 짝꿍코드', v('f-my-partner-code'));
 
       // ===== 2. 서비스 범위 =====
       pdfDrawSectionTitle(ctx, '2. 서비스 범위');
