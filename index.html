@@ -1006,6 +1006,9 @@
       var ctx = { pdfDoc: pdfDoc, fontR: fontR, fontB: fontB };
       pdfNewPage(ctx);
 
+      // PDF 문서 제목(메타데이터)을 파일명 및 메일 제목과 동일하게 설정
+      pdfDoc.setTitle(buildContractName());
+
       pdfDrawTitle(ctx, 'MOMENT WORKS 축의대 대행 서비스 계약서');
 
       // ===== 1. 계약 정보 =====
@@ -1014,6 +1017,7 @@
       pdfRow4(ctx, '예식장', v('f-venue'), '홀명', v('f-hall'));
       pdfRowFull(ctx, '지역', v('f-region'));
       pdfRowFull(ctx, '계약자', v('f-client'));
+      pdfRowFull(ctx, '연락처', v('f-client-phone'));
       pdfRow4(ctx, '상담일', v('f-consult-date'), '한측/양측/통합', v('f-side'));
       pdfRow4(ctx, '신랑 하객인원', v('f-groom-guests') + '명', '신부 하객인원', v('f-bride-guests') + '명');
       pdfRow4(ctx, '기준인원', v('f-base-guests'), '기준금액', fmtMoney(v('f-base-amount')) + '원');
