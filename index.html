@@ -347,7 +347,7 @@
       <div class="field">
         <label for="f-partner-code">짝꿍코드(추천인 코드 / 선택항목)</label>
         <input type="text" id="f-partner-code" placeholder="짝꿍코드가 있으시면 입력해 주세요" oninput="momentWorksCalcTotal()">
-        <p class="hint">짝꿍코드 입력 시 계약금액에서 10,000원이 추가 할인됩니다.</p>
+        <p class="hint">짝꿍코드 입력 시 계약금액에서 20,000원이 추가 할인됩니다.</p>
       </div>
 
       <div class="field">
@@ -718,7 +718,7 @@
       var earlybirdAmount = (SIDE_INFO[side] && SIDE_INFO[side].earlybird) || 0;
 
       var earlybirdDiscount = earlybird ? earlybirdAmount : 0;
-      var partnerDiscount = partnerCode ? 10000 : 0;
+      var partnerDiscount = partnerCode ? 20000 : 0;
       var specialDiscount = earlybirdDiscount + partnerDiscount;
 
       document.getElementById('f-special-discount').value = base > 0 ? specialDiscount : '';
@@ -1120,7 +1120,7 @@
       pdfRowFull(ctx, '기준금액', fmtMoney(v('f-base-amount-confirm')) + '원');
       var earlybirdAmount = (SIDE_INFO[v('f-side')] && SIDE_INFO[v('f-side')].earlybird) || 0;
       pdfRowFull(ctx, '얼리버드 할인 적용', document.getElementById('f-earlybird').checked ? ('적용 (' + fmtMoney(earlybirdAmount) + '원 할인)') : '미적용');
-      pdfRowFull(ctx, '짝꿍코드', v('f-partner-code') !== '-' ? (v('f-partner-code') + ' (10,000원 할인 적용)') : '미입력');
+      pdfRowFull(ctx, '짝꿍코드', v('f-partner-code') !== '-' ? (v('f-partner-code') + ' (20,000원 할인 적용)') : '미입력');
       pdfRowFull(ctx, '특별 할인 금액', fmtMoney(v('f-special-discount')) + '원');
       pdfRowFull(ctx, '계약금액', fmtMoney(v('f-total')) + '원');
       pdfRowFull(ctx, '계약금 / 입금일', fmtMoney(v('f-deposit')) + '원 / ' + v('f-deposit-date'));
