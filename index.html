@@ -238,9 +238,9 @@
         <label for="f-side">한측 / 양측 / 통합</label>
         <select id="f-side" onchange="momentWorksApplySide()">
           <option value="">선택</option>
-          <option value="한측">한측 (315,000원 · 기준인원 250명)</option>
-          <option value="양측">양측 (580,000원 · 기준인원 400명)</option>
-          <option value="통합">통합 (315,000원 · 기준인원 150명)</option>
+          <option value="한측">한측 (450,000원 · 기준인원 250명)</option>
+          <option value="양측">양측 (800,000원 · 기준인원 400명)</option>
+          <option value="통합">통합 (500,000원 · 기준인원 150명)</option>
         </select>
       </div>
 
@@ -341,7 +341,7 @@
 
       <div class="agree" style="margin-top:0;margin-bottom:14px;">
         <input type="checkbox" id="f-earlybird" onchange="momentWorksCalcTotal()">
-        <label for="f-earlybird"><strong>얼리버드 할인 적용</strong> (상담 후 5일 이내 예약 확정 · 20,000원 할인)</label>
+        <label for="f-earlybird"><strong>얼리버드 할인 적용</strong> (상담 후 5일 이내 예약 확정 · <span id="f-earlybird-amount-label">패키지 선택 시 할인액 표시</span>)</label>
       </div>
 
       <div class="field">
@@ -665,9 +665,9 @@
     });
 
     var SIDE_INFO = {
-      '한측':  { amount: 315000, guests: '250명' },
-      '양측':  { amount: 580000, guests: '400명' },
-      '통합':  { amount: 315000, guests: '150명' }
+      '한측':  { amount: 450000, guests: '250명', earlybird: 30000 },
+      '양측':  { amount: 800000, guests: '400명', earlybird: 50000 },
+      '통합':  { amount: 500000, guests: '150명', earlybird: 30000 }
     };
 
     function momentWorksApplySide(){
@@ -714,8 +714,10 @@
       var base = parseInt(document.getElementById('f-base-amount').value) || 0;
       var earlybird = document.getElementById('f-earlybird').checked;
       var partnerCode = document.getElementById('f-partner-code').value.trim();
+      var side = document.getElementById('f-side').value;
+      var earlybirdAmount = (SIDE_INFO[side] && SIDE_INFO[side].earlybird) || 0;
 
-      var earlybirdDiscount = earlybird ? 20000 : 0;
+      var earlybirdDiscount = earlybird ? earlybirdAmount : 0;
       var partnerDiscount = partnerCode ? 10000 : 0;
       var specialDiscount = earlybirdDiscount + partnerDiscount;
 
@@ -724,6 +726,11 @@
       var total = base > 0 ? (base - specialDiscount) : 0;
       document.getElementById('f-total').value = total > 0 ? total : '';
       momentWorksCalcBalance();
+
+      var earlybirdLabelEl = document.getElementById('f-earlybird-amount-label');
+      if(earlybirdLabelEl){
+        earlybirdLabelEl.textContent = earlybirdAmount ? (earlybirdAmount.toLocaleString('ko-KR') + '원 할인') : '패키지 선택 시 할인액 표시';
+      }
     }
 
     function momentWorksCalcBalance(){
@@ -1111,7 +1118,8 @@
       // ===== 3. 계약금 및 결제 =====
       pdfDrawSectionTitle(ctx, '3. 계약금 및 결제');
       pdfRowFull(ctx, '기준금액', fmtMoney(v('f-base-amount-confirm')) + '원');
-      pdfRowFull(ctx, '얼리버드 할인 적용', document.getElementById('f-earlybird').checked ? '적용 (20,000원 할인)' : '미적용');
+      var earlybirdAmount = (SIDE_INFO[v('f-side')] && SIDE_INFO[v('f-side')].earlybird) || 0;
+      pdfRowFull(ctx, '얼리버드 할인 적용', document.getElementById('f-earlybird').checked ? ('적용 (' + fmtMoney(earlybirdAmount) + '원 할인)') : '미적용');
       pdfRowFull(ctx, '짝꿍코드', v('f-partner-code') !== '-' ? (v('f-partner-code') + ' (10,000원 할인 적용)') : '미입력');
       pdfRowFull(ctx, '특별 할인 금액', fmtMoney(v('f-special-discount')) + '원');
       pdfRowFull(ctx, '계약금액', fmtMoney(v('f-total')) + '원');
