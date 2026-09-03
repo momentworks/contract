@@ -289,11 +289,11 @@
       <div class="field-row">
         <div class="field">
           <label for="f-groom-guests">(신랑) 하객인원</label>
-          <input type="number" id="f-groom-guests" placeholder="명" min="0">
+          <input type="number" id="f-groom-guests" placeholder="명" min="0" oninput="momentWorksCalcTotal()">
         </div>
         <div class="field">
           <label for="f-bride-guests">(신부) 하객인원</label>
-          <input type="number" id="f-bride-guests" placeholder="명" min="0">
+          <input type="number" id="f-bride-guests" placeholder="명" min="0" oninput="momentWorksCalcTotal()">
         </div>
       </div>
 
@@ -348,6 +348,12 @@
         <label for="f-partner-code">짝꿍코드(추천인 코드 / 선택항목)</label>
         <input type="text" id="f-partner-code" placeholder="짝꿍코드가 있으시면 입력해 주세요" oninput="momentWorksCalcTotal()">
         <p class="hint">짝꿍코드 입력 시 계약금액에서 20,000원이 추가 할인됩니다.</p>
+      </div>
+
+      <div class="field">
+        <label for="f-guest-scale-discount">하객 규모별 맞춤할인 (원)</label>
+        <input type="text" id="f-guest-scale-discount" placeholder="0" readonly>
+        <p class="hint">한측: 하객 100명 이하 시 30,000원 / 양측: 하객 합산 200명 이하 시 50,000원 (1번 항목의 하객인원 기준 자동 계산)</p>
       </div>
 
       <div class="field">
@@ -708,6 +714,7 @@
         el.disabled = disableBride;
         if(disableBride){ el.value = ''; }
       });
+      momentWorksCalcTotal();
     }
 
     function momentWorksCalcTotal(){
@@ -717,9 +724,21 @@
       var side = document.getElementById('f-side').value;
       var earlybirdAmount = (SIDE_INFO[side] && SIDE_INFO[side].earlybird) || 0;
 
+      var groomGuests = parseInt(document.getElementById('f-groom-guests').value) || 0;
+      var brideGuests = parseInt(document.getElementById('f-bride-guests').value) || 0;
+      var totalGuests = groomGuests + brideGuests;
+
+      var guestScaleDiscount = 0;
+      if(side === '한측' && totalGuests > 0 && totalGuests <= 100){
+        guestScaleDiscount = 30000;
+      } else if(side === '양측' && totalGuests > 0 && totalGuests <= 200){
+        guestScaleDiscount = 50000;
+      }
+      document.getElementById('f-guest-scale-discount').value = guestScaleDiscount;
+
       var earlybirdDiscount = earlybird ? earlybirdAmount : 0;
       var partnerDiscount = partnerCode ? 20000 : 0;
-      var specialDiscount = earlybirdDiscount + partnerDiscount;
+      var specialDiscount = earlybirdDiscount + partnerDiscount + guestScaleDiscount;
 
       document.getElementById('f-special-discount').value = base > 0 ? specialDiscount : '';
 
@@ -1121,6 +1140,8 @@
       var earlybirdAmount = (SIDE_INFO[v('f-side')] && SIDE_INFO[v('f-side')].earlybird) || 0;
       pdfRowFull(ctx, '얼리버드 할인 적용', document.getElementById('f-earlybird').checked ? ('적용 (' + fmtMoney(earlybirdAmount) + '원 할인)') : '미적용');
       pdfRowFull(ctx, '짝꿍코드', v('f-partner-code') !== '-' ? (v('f-partner-code') + ' (20,000원 할인 적용)') : '미입력');
+      var guestScaleDiscountVal = parseInt(v('f-guest-scale-discount')) || 0;
+      pdfRowFull(ctx, '하객 규모별 맞춤할인', guestScaleDiscountVal > 0 ? (fmtMoney(guestScaleDiscountVal) + '원 할인 적용') : '해당 없음');
       pdfRowFull(ctx, '특별 할인 금액', fmtMoney(v('f-special-discount')) + '원');
       pdfRowFull(ctx, '계약금액', fmtMoney(v('f-total')) + '원');
       pdfRowFull(ctx, '계약금 / 입금일', fmtMoney(v('f-deposit')) + '원 / ' + v('f-deposit-date'));
