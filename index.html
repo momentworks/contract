@@ -239,7 +239,7 @@
         <select id="f-side" onchange="momentWorksApplySide()">
           <option value="">선택</option>
           <option value="한측">한측 (450,000원 · 기준인원 250명)</option>
-          <option value="양측">양측 (800,000원 · 기준인원 400명)</option>
+          <option value="양측">양측 (900,000원 · 기준인원 400명)</option>
           <option value="통합">통합 (500,000원 · 기준인원 150명)</option>
         </select>
       </div>
@@ -351,10 +351,11 @@
       </div>
 
       <div class="field">
-        <label for="f-guest-scale-discount">하객 규모별 맞춤할인 (원)</label>
-        <input type="text" id="f-guest-scale-discount" placeholder="0" readonly>
-        <p class="hint">한측: 하객 100명 이하 시 30,000원 / 양측: 하객 합산 200명 이하 시 50,000원 (1번 항목의 하객인원 기준 자동 계산)</p>
+        <label for="f-both-side-discount">양측할인 (원)</label>
+        <input type="text" id="f-both-side-discount" placeholder="0" readonly>
+        <p class="hint">양측 계약 시 120,000원 자동 할인</p>
       </div>
+
 
       <div class="agree" style="margin-top:0;margin-bottom:6px;">
         <input type="checkbox" id="f-manual-discount-enabled" onchange="momentWorksToggleManualDiscount()">
@@ -396,6 +397,7 @@
         예금주: <strong>김현관(모먼트웍스)</strong>
       </div>
       <p class="warn-note">잔금은 할인 혜택 적용에 따라 변동(차감)될 수 있습니다.</p>
+      <p class="warn-note">하객 규모별 맞춤 할인은 본식 종료 후 하객 수 집계 후 적용됩니다. (하객 규모별 할인 기준 충족 시 할인 적용)</p>
     </div>
 
     <!-- 4. 계약의 성립 -->
@@ -684,7 +686,7 @@
 
     var SIDE_INFO = {
       '한측':  { amount: 450000, guests: '250명', earlybird: 30000 },
-      '양측':  { amount: 800000, guests: '400명', earlybird: 50000 },
+      '양측':  { amount: 900000, guests: '400명', earlybird: 50000 },
       '통합':  { amount: 500000, guests: '150명', earlybird: 30000 }
     };
 
@@ -744,24 +746,15 @@
       var side = document.getElementById('f-side').value;
       var earlybirdAmount = (SIDE_INFO[side] && SIDE_INFO[side].earlybird) || 0;
 
-      var groomGuests = parseInt(document.getElementById('f-groom-guests').value) || 0;
-      var brideGuests = parseInt(document.getElementById('f-bride-guests').value) || 0;
-      var totalGuests = groomGuests + brideGuests;
-
-      var guestScaleDiscount = 0;
-      if(side === '한측' && totalGuests > 0 && totalGuests <= 100){
-        guestScaleDiscount = 30000;
-      } else if(side === '양측' && totalGuests > 0 && totalGuests <= 200){
-        guestScaleDiscount = 50000;
-      }
-      document.getElementById('f-guest-scale-discount').value = guestScaleDiscount;
+      var bothSideDiscount = (side === '양측') ? 120000 : 0;
+      document.getElementById('f-both-side-discount').value = bothSideDiscount;
 
       var manualDiscountEnabled = document.getElementById('f-manual-discount-enabled').checked;
       var manualDiscount = manualDiscountEnabled ? (parseInt(document.getElementById('f-manual-discount-amount').value) || 0) : 0;
 
       var earlybirdDiscount = earlybird ? earlybirdAmount : 0;
       var partnerDiscount = partnerCode ? 20000 : 0;
-      var specialDiscount = earlybirdDiscount + partnerDiscount + guestScaleDiscount + manualDiscount;
+      var specialDiscount = earlybirdDiscount + partnerDiscount + bothSideDiscount + manualDiscount;
 
       document.getElementById('f-special-discount').value = base > 0 ? specialDiscount : '';
 
@@ -1163,8 +1156,8 @@
       var earlybirdAmount = (SIDE_INFO[v('f-side')] && SIDE_INFO[v('f-side')].earlybird) || 0;
       pdfRowFull(ctx, '얼리버드 할인 적용', document.getElementById('f-earlybird').checked ? ('적용 (' + fmtMoney(earlybirdAmount) + '원 할인)') : '미적용');
       pdfRowFull(ctx, '짝꿍코드', v('f-partner-code') !== '-' ? (v('f-partner-code') + ' (20,000원 할인 적용)') : '미입력');
-      var guestScaleDiscountVal = parseInt(v('f-guest-scale-discount')) || 0;
-      pdfRowFull(ctx, '하객 규모별 맞춤할인', guestScaleDiscountVal > 0 ? (fmtMoney(guestScaleDiscountVal) + '원 할인 적용') : '해당 없음');
+      var bothSideDiscountVal = parseInt(v('f-both-side-discount')) || 0;
+      pdfRowFull(ctx, '양측할인', bothSideDiscountVal > 0 ? (fmtMoney(bothSideDiscountVal) + '원 할인 적용') : '해당 없음');
       var manualDiscountVal = document.getElementById('f-manual-discount-enabled').checked ? (parseInt(v('f-manual-discount-amount')) || 0) : 0;
       pdfRowFull(ctx, '추가 할인', manualDiscountVal > 0 ? (fmtMoney(manualDiscountVal) + '원 할인 적용') : '해당 없음');
       pdfRowFull(ctx, '특별 할인 금액', fmtMoney(v('f-special-discount')) + '원');
@@ -1174,6 +1167,7 @@
       ctx.y -= 4;
       pdfDrawParagraph(ctx, '계약금 납부 계좌: 카카오뱅크 3333-37-9293260 / 예금주: 김현관(모먼트웍스)', { size: 8.5, lineH: 12, color: PDF_C_MUTED });
       pdfDrawParagraph(ctx, '잔금은 할인 혜택 적용에 따라 변동(차감)될 수 있습니다.', { size: 8.5, lineH: 12, color: PDF_C_MUTED });
+      pdfDrawParagraph(ctx, '하객 규모별 맞춤 할인은 본식 종료 후 하객 수 집계 후 적용됩니다. (하객 규모별 할인 기준 충족 시 할인 적용)', { size: 8.5, lineH: 12, color: PDF_C_MUTED });
       pdfDrawParagraph(ctx, '현금영수증은 잔금 정산일 포함 5일 이내에 계약금+잔금 기준으로 발행합니다.', { size: 8.5, lineH: 12, color: PDF_C_MUTED });
 
       // ===== 4. 계약의 성립 =====
