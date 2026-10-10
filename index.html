@@ -1096,10 +1096,11 @@
     function buildContractName(){
       var date = (document.getElementById('f-date').value || '').replace(/-/g,'');
       var time = (document.getElementById('f-time').value || '').replace(/:/g,'');
-      var side = document.getElementById('f-side').value.trim();
       var name = document.getElementById('f-signer-name').value.trim();
-      var region = document.getElementById('f-region').value.trim();
-      return '[모먼트웍스] 축의대 대행 서비스 계약서(' + date + '_' + time + ')_(' + side + ')' + name + '(' + region + ')';
+      var regionRaw = document.getElementById('f-region').value.trim();
+      // "서울/청담" 형식이면 '/' 뒷부분("청담")만 사용, '/'가 없으면 입력값 그대로 사용
+      var region = regionRaw.indexOf('/') >= 0 ? regionRaw.split('/').pop().trim() : regionRaw;
+      return '[모먼트웍스] 축의대 대행 서비스 계약서(' + date + '_' + time + ')_' + name + '(' + region + ')';
     }
 
     // 실제 텍스트 + 한글 폰트(전체 임베딩)로 계약서 PDF를 생성 (텍스트 선택/복사 가능, 자동 페이지네이션)
