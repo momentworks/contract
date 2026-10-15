@@ -1073,7 +1073,8 @@
 
 
     function collectFormData(){
-      var v = function(id){ return document.getElementById(id).value || ''; };
+      var v = function(id){ var e = document.getElementById(id); return e ? (e.value || '') : ''; };
+      var c = function(id){ var e = document.getElementById(id); return !!(e && e.checked); };
       return {
         secret: GAS_SHARED_SECRET,
         weddingDate: v('f-date'),
@@ -1082,11 +1083,30 @@
         hall: v('f-hall'),
         region: v('f-region'),
         side: v('f-side'),
+        hanSide: v('f-han-side'),
+        clientSide: v('f-client-side'),
+        clientName: v('f-client-name'),
+        client: v('f-client'),
+        clientPhone: v('f-client-phone'),
+        groomName: v('f-groom-name-info'),
+        brideName: v('f-bride-name-info'),
+        consultDate: v('f-consult-date'),
+        groomGuests: v('f-groom-guests'),
+        brideGuests: v('f-bride-guests'),
+        baseGuests: v('f-base-guests'),
+        baseAmount: v('f-base-amount-confirm') || v('f-base-amount'),
+        myPartnerCode: v('f-my-partner-code'),
+        partnerCode: v('f-partner-code'),
+        earlybird: c('f-earlybird'),
+        bothSideDiscount: v('f-both-side-discount'),
+        manualDiscountEnabled: c('f-manual-discount-enabled'),
+        manualDiscountAmount: v('f-manual-discount-amount'),
+        specialDiscount: v('f-special-discount'),
         total: v('f-total'),
         deposit: v('f-deposit'),
+        depositDate: v('f-deposit-date'),
         balance: v('f-balance'),
-        earlybird: document.getElementById('f-earlybird').checked,
-        partnerCode: v('f-partner-code'),
+        contractDate: v('f-contract-date'),
         signerName: v('f-signer-name'),
         signerPhone: v('f-signer-phone')
       };
@@ -1336,7 +1356,16 @@
         }
 
         if(result.ok){
-          alert('계약서가 정상적으로 접수되었습니다.\nPDF가 담당자 이메일로 자동 발송되었습니다.');
+          var msg = '계약서가 정상적으로 접수되었습니다.\nPDF가 담당자 이메일로 자동 발송되었습니다.';
+          if(!('sheetRow' in result) && !('driveUrl' in result)){
+            msg += '\n\n[확인 필요] 드라이브 저장/시트 기록 결과가 오지 않았습니다.\nApps Script가 최신 코드로 "새 버전" 배포되지 않았을 가능성이 큽니다.';
+          } else {
+            msg += '\n\n드라이브 저장: ' + (result.driveUrl ? '완료' : '실패 - ' + (result.driveError || '알 수 없음'));
+            msg += '\n시트 기록: ' + (result.sheetRow ? '완료 (' + result.sheetRow + '행)' : '실패 - ' + (result.sheetError || '알 수 없음'));
+            if(result.sheetMissingHeaders && result.sheetMissingHeaders.length){ msg += '\n(시트에서 못 찾은 열: ' + result.sheetMissingHeaders.join(', ') + ')'; }
+          }
+          console.log('GAS 결과:', result);
+          alert(msg);
         } else {
           console.error('GAS 오류:', result.error);
           alert('접수 중 문제가 발생했습니다.\n\n[서버 오류 내용]\n' + result.error);
