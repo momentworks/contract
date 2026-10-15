@@ -1085,7 +1085,7 @@
         side: v('f-side'),
         hanSide: v('f-han-side'),
         clientSide: v('f-client-side'),
-        clientName: v('f-client-name'),
+        clientName: v('f-client-name').trim(),
         client: v('f-client'),
         clientPhone: v('f-client-phone'),
         groomName: v('f-groom-name-info'),
@@ -1362,6 +1362,7 @@
           } else {
             msg += '\n\n드라이브 저장: ' + (result.driveUrl ? '완료' : '실패 - ' + (result.driveError || '알 수 없음'));
             msg += '\n시트 기록: ' + (result.sheetRow ? '완료 (' + result.sheetRow + '행)' : '실패 - ' + (result.sheetError || '알 수 없음'));
+            if(result.sheetWritten){ var w = result.sheetWritten; msg += '\n(계약코드: ' + (w['계약코드'] || '없음') + ' / 신랑하객수: ' + (w['신랑하객수'] === '' || w['신랑하객수'] === undefined ? '없음' : w['신랑하객수']) + ' / 신부하객수: ' + (w['신부하객수'] === '' || w['신부하객수'] === undefined ? '없음' : w['신부하객수']) + ')'; }
             if(result.sheetMissingHeaders && result.sheetMissingHeaders.length){ msg += '\n(시트에서 못 찾은 열: ' + result.sheetMissingHeaders.join(', ') + ')'; }
           }
           console.log('GAS 결과:', result);
